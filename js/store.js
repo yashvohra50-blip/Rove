@@ -7,15 +7,29 @@ import { DESTINATIONS, JAIPUR_CAPSULE_PIECES, JAIPUR_OUTFITS } from './data/mock
 
 class Store {
   constructor() {
+    let initialTrip = {
+      destination: 'Jaipur',
+      destinationMeta: DESTINATIONS.find(d => d.id === 'jaipur'),
+      duration: 5,
+      activities: ['sightseeing', 'dining', 'shopping'],
+      style: 'minimal',
+      luggage: 'carryon'
+    };
+
+    try {
+      const saved = localStorage.getItem('rove_trip');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.destination) {
+          initialTrip = { ...initialTrip, ...parsed };
+        }
+      }
+    } catch (e) {
+      // Graceful fallback if cookies/storage blocked
+    }
+
     this.state = {
-      currentTrip: {
-        destination: 'Jaipur',
-        destinationMeta: DESTINATIONS.find(d => d.id === 'jaipur'),
-        duration: 5,
-        activities: ['sightseeing', 'dining', 'shopping'],
-        style: 'minimal',
-        luggage: 'carryon'
-      },
+      currentTrip: initialTrip,
       wardrobe: {
         pieces: [...JAIPUR_CAPSULE_PIECES],
         outfits: [...JAIPUR_OUTFITS],
@@ -35,6 +49,12 @@ class Store {
     };
 
     this.listeners = new Set();
+  }
+
+  saveTripState() {
+    try {
+      localStorage.setItem('rove_trip', JSON.stringify(this.state.currentTrip));
+    } catch (e) {}
   }
 
   getState() {
@@ -87,11 +107,13 @@ class Store {
       recommendedFabrics: ['Lightweight Cotton', 'Linen', 'Merino Wool'],
       image: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1600&q=85'
     };
+    this.saveTripState();
     this.notify('TRIP_UPDATED', this.state.currentTrip);
   }
 
   updateTripDuration(days) {
     this.state.currentTrip.duration = Number(days);
+    this.saveTripState();
     this.notify('TRIP_UPDATED', this.state.currentTrip);
   }
 
@@ -103,16 +125,19 @@ class Store {
       acts.add(actId);
     }
     this.state.currentTrip.activities = Array.from(acts);
+    this.saveTripState();
     this.notify('TRIP_UPDATED', this.state.currentTrip);
   }
 
   updateTripStyle(styleId) {
     this.state.currentTrip.style = styleId;
+    this.saveTripState();
     this.notify('TRIP_UPDATED', this.state.currentTrip);
   }
 
   updateTripLuggage(luggageId) {
     this.state.currentTrip.luggage = luggageId;
+    this.saveTripState();
     this.notify('TRIP_UPDATED', this.state.currentTrip);
   }
 

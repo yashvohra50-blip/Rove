@@ -8,46 +8,21 @@
  */
 
 import { store } from './store.js';
+import { globalScrollReveal } from './components/ScrollReveal.js';
 
 export class Router {
   constructor(routes, pageContainer) {
     this.routes = routes;
     this.pageContainer = pageContainer;
     this.currentRoute = null;
-    this.observer = null;
 
     this.init();
   }
 
   init() {
-    this.setupIntersectionObserver();
-
     window.addEventListener('hashchange', () => this.handleRouting());
     // Initial route
     this.handleRouting();
-  }
-
-  setupIntersectionObserver() {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -80px 0px',
-      threshold: 0.1
-    };
-
-    this.observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-  }
-
-  observeReveals() {
-    if (!this.observer) return;
-    const elements = document.querySelectorAll('.reveal-on-scroll:not(.is-visible)');
-    elements.forEach(el => this.observer.observe(el));
   }
 
   handleRouting() {
@@ -88,10 +63,10 @@ export class Router {
       this.pageContainer.classList.remove('page-leaving');
       this.pageContainer.classList.add('page-entering');
 
-      // Trigger scroll observer for new elements
+      // Trigger formalized scroll observer for newly rendered elements
       requestAnimationFrame(() => {
         this.pageContainer.classList.remove('page-entering');
-        this.observeReveals();
+        globalScrollReveal.observeAll(this.pageContainer);
       });
     }, 200);
   }

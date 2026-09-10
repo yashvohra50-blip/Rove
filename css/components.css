@@ -426,6 +426,28 @@
   color: var(--text-primary);
 }
 
+/* --------------------------------------------------------------------------
+   5. PARALLAX IMAGE COMPONENT
+   -------------------------------------------------------------------------- */
+.parallax-image-frame {
+  position: relative;
+  overflow: hidden;
+  background: #111116;
+  border-radius: var(--radius-xs);
+}
+
+.parallax-image-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-cinematic), filter var(--transition-normal);
+  will-change: transform;
+}
+
+.parallax-image-frame:hover .parallax-image-media {
+  transform: scale(1.04);
+}
+
 /* Responsive Media Queries */
 @media (max-width: 960px) {
   .nav-links {
