@@ -91,6 +91,21 @@ rove/
 
 ---
 
+## Evolution Milestones (Phases 1 – 10)
+
+1. **Phase 1 — Protect Foundation**: Stable component modularization, zero console errors, reliable router & store.
+2. **Phase 2 — Hero Refinement**: Multi-plane depth, ambient lighting, fluid scroll indicator.
+3. **Phase 3 — Cinematic Transition**: Controlled scroll progression (*"YOU PACK FOR THE TRIP."* → *"ROVE PACKS FOR THE EXPERIENCE."*).
+4. **Phase 4 — Trip Context Story**: 7-beat sequential focus with dynamic environmental shifts for Jaipur.
+5. **Phase 5 — How ROVE Thinks**: 8-stage intelligence pipeline with single dominant stage focus & progress tracking.
+6. **Phase 6 — Pack Less. Wear More.**: Major product showcase (`6 PIECES` → `8 OUTFITS` → `5 DAYS` → `1 BAG` → `NOTHING EXTRA.`).
+7. **Phase 7 — Experience Modules**: Product chapters for Clothing, Footwear, and Pack with Coming Soon modal.
+8. **Phase 8 — Internal Page Transitions**: Shared transition system and unified chapter heroes across `/clothing` and `/footwear`.
+9. **Phase 9 — Micro-Interaction Pass**: Tactile `:active` depression feedback, focus rings, and directional indicators.
+10. **Phase 10 — Atmosphere Pass**: Restrained analog film grain veil, multi-layer optical diffuse shadows, soft ambient lighting blooms with 20s organic drift, and tactile clothing weave micro-textures ("depth, not clutter").
+
+---
+
 ## Running Locally
 
 To run the local server without any external dependencies:
