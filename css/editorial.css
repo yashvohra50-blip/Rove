@@ -4,6 +4,29 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
+   0. ATMOSPHERIC LIGHTING & DRIFT (Phase 10)
+   Whisper-soft ambient color blooms with silky 20-second organic drift
+   -------------------------------------------------------------------------- */
+@keyframes ambientDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.65;
+  }
+  33% {
+    transform: translate3d(24px, -18px, 0) scale(1.05);
+    opacity: 0.85;
+  }
+  66% {
+    transform: translate3d(-18px, 20px, 0) scale(0.96);
+    opacity: 0.70;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.65;
+  }
+}
+
+/* --------------------------------------------------------------------------
    1. SECTION — THE PROBLEM ("YOU PACK FOR THE TRIP" -> "ROVE PACKS FOR THE EXPERIENCE")
    Phase 3: Cinematic Chapter Transition Stage with Controlled Scroll Progression
    -------------------------------------------------------------------------- */
@@ -33,6 +56,23 @@
   justify-content: center;
   overflow: hidden;
   z-index: 2;
+}
+
+/* Phase 10 Atmospheric Champagne Bloom */
+.chapter-sticky-stage::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, var(--glow-champagne, rgba(212, 175, 122, 0.07)) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: 2;
+  animation: ambientDrift 20s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 /* Subtle Architectural Background Imagery */
@@ -238,16 +278,20 @@
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(circle at 50% 50%, rgba(10, 10, 12, 0.42) 0%, rgba(10, 10, 12, 0.88) 72%, #0A0A0C 100%),
-    linear-gradient(180deg, #0A0A0C 0%, rgba(10, 10, 12, 0.35) 30%, rgba(10, 10, 12, 0.8) 78%, #0A0A0C 100%);
+    radial-gradient(ellipse at 50% 50%, rgba(10, 10, 12, 0.38) 0%, rgba(10, 10, 12, 0.86) 72%, #0A0A0C 100%),
+    linear-gradient(180deg, #0A0A0C 0%, rgba(10, 10, 12, 0.32) 28%, rgba(10, 10, 12, 0.80) 80%, #0A0A0C 100%);
 }
 
 .env-ambient-glow {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(214, 118, 92, 0.18) 0%, transparent 70%);
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  background: radial-gradient(circle at 50% 50%, var(--glow-sandstone, rgba(214, 118, 92, 0.18)) 0%, transparent 70%);
   transition: background 0.65s var(--ease-out-expo);
   pointer-events: none;
+  animation: ambientDrift 24s ease-in-out infinite alternate;
+  will-change: transform, opacity;
 }
 
 /* Stage Top Header */
@@ -446,14 +490,18 @@
   z-index: 3;
 }
 
-/* Atmospheric Ambient Mesh */
+/* Atmospheric Ambient Mesh (Phase 10 Organic Drift) */
 .story-ambient-glow {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 122, 0.12) 0%, transparent 65%);
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  background: radial-gradient(circle at 50% 50%, var(--glow-champagne, rgba(212, 175, 122, 0.10)) 0%, transparent 65%);
   transition: background 0.6s var(--ease-out-expo);
   pointer-events: none;
   z-index: 1;
+  animation: ambientDrift 22s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 /* Giant Ghost Watermark Numeral */
@@ -664,6 +712,24 @@
   border-bottom: 1px solid var(--border-subtle);
   padding-top: clamp(6rem, 11vw, 10rem);
   padding-bottom: clamp(6rem, 11vw, 10rem);
+  overflow: hidden;
+}
+
+/* Phase 10 Atmospheric Ambient Bloom behind Wardrobe Combiner */
+.killer-section::before {
+  content: '';
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, var(--glow-champagne, rgba(212, 175, 122, 0.06)) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  animation: ambientDrift 26s ease-in-out infinite alternate;
+  will-change: transform, opacity;
 }
 
 .killer-header {
@@ -767,6 +833,19 @@
   position: relative;
   opacity: 0.45;
   will-change: transform, opacity;
+  overflow: hidden;
+}
+
+/* Phase 10 Tactile Fabric Weave Micro-Pattern */
+.inventory-piece-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.024;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+  background-size: 3px 3px;
+  border-radius: inherit;
 }
 
 .inventory-piece-card:hover {
@@ -922,6 +1001,19 @@
   min-height: 380px;
   position: relative;
   overflow: hidden;
+}
+
+/* Phase 10 Tactile Fabric Sheen Overlay */
+.active-outfit-showcase::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+  background-size: 3px 3px;
+  border-radius: inherit;
+  z-index: 1;
 }
 
 .outfit-hero-visual {
@@ -1178,7 +1270,21 @@
   padding: 2.25rem 2rem;
   text-decoration: none;
   cursor: pointer;
+  box-shadow: var(--shadow-card);
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Phase 10 Tangible Material Micro-Texture */
+.chapter-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.026;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+  background-size: 3px 3px;
+  z-index: 2;
+  border-radius: inherit;
 }
 
 /* Layer 1: Image Backdrop with Multi-Stage Movement */
@@ -1918,6 +2024,14 @@
   .chapter-progress-line {
     transform: scaleX(1) !important;
     transition: none !important;
+  }
+
+  .chapter-sticky-stage::before,
+  .env-ambient-glow,
+  .story-ambient-glow,
+  .killer-section::before {
+    animation: none !important;
+    transform: translate(-50%, -50%) !important;
   }
 }
 
