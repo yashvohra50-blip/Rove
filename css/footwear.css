@@ -192,3 +192,49 @@
     height: 300px;
   }
 }
+
+@media (max-width: 768px) {
+  .footwear-page {
+    padding-top: 80px;
+    padding-bottom: 5rem;
+  }
+
+  .footwear-header-stage {
+    padding: 2rem 0 3rem 0;
+    gap: 1rem;
+  }
+
+  .archetypes-grid {
+    gap: 1.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .archetype-content {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .archetype-media-frame {
+    height: 260px;
+  }
+}
+
+@media (max-width: 480px) {
+  .archetype-media-frame {
+    height: 220px;
+  }
+
+  .archetype-name {
+    font-size: 1.35rem;
+  }
+
+  .archetype-content {
+    padding: 1.25rem;
+  }
+
+  .archetype-specs-list {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+}
+

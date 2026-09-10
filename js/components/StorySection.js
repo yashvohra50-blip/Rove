@@ -192,6 +192,45 @@ export class StorySection {
       'radial-gradient(circle at 50% 50%, rgba(212, 175, 122, 0.32) 0%, transparent 70%)'  // 08: Packing
     ];
 
+    let observer = null;
+
+    const setupMobileObserver = () => {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (!isMobile) return;
+
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const stepIdx = parseInt(entry.target.getAttribute('data-stage') || '0', 10);
+            const currentStepNum = String(stepIdx + 1).padStart(2, '0');
+            if (progressCounter) {
+              progressCounter.textContent = `${currentStepNum} / 08`;
+            }
+            if (progressFill) {
+              progressFill.style.width = `${Math.round(((stepIdx + 1) / numSteps) * 100)}%`;
+            }
+            if (ambientGlow && stageGlows[stepIdx]) {
+              ambientGlow.style.background = stageGlows[stepIdx];
+            }
+            dots.forEach((dot, idx) => {
+              dot.classList.toggle('is-active', idx === stepIdx);
+            });
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '-25% 0px -25% 0px',
+        threshold: 0.15
+      });
+
+      items.forEach(item => observer.observe(item));
+    };
+
     const resetReducedMotionStyles = () => {
       items.forEach(item => {
         item.style.opacity = '';
@@ -199,10 +238,13 @@ export class StorySection {
         item.style.visibility = '';
         item.style.pointerEvents = '';
       });
-      if (progressFill) progressFill.style.width = '100%';
-      if (progressCounter) progressCounter.textContent = '08 / 08';
-      if (ghostNum) ghostNum.textContent = '01';
-      dots.forEach((d, idx) => d.classList.toggle('is-active', idx === 0));
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        if (progressFill) progressFill.style.width = '100%';
+        if (progressCounter) progressCounter.textContent = '08 / 08';
+        if (ghostNum) ghostNum.textContent = '01';
+        dots.forEach((d, idx) => d.classList.toggle('is-active', idx === 0));
+      }
     };
 
     const updatePipelineProgression = () => {
@@ -210,6 +252,10 @@ export class StorySection {
       if (!track.isConnected) {
         window.removeEventListener('scroll', onScroll);
         window.removeEventListener('resize', onResize);
+        if (observer) {
+          observer.disconnect();
+          observer = null;
+        }
         return;
       }
 
@@ -299,7 +345,10 @@ export class StorySection {
 
     const onResize = () => {
       if (!ticking) {
-        requestAnimationFrame(updatePipelineProgression);
+        requestAnimationFrame(() => {
+          updatePipelineProgression();
+          setupMobileObserver();
+        });
         ticking = true;
       }
     };
@@ -309,5 +358,6 @@ export class StorySection {
 
     // Initial calculation
     updatePipelineProgression();
+    setupMobileObserver();
   }
 }

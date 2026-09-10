@@ -60,7 +60,7 @@
   --text-4xl: 2.75rem;   /* 44px */
   --text-5xl: 3.75rem;   /* 60px */
   --text-6xl: 5rem;      /* 80px */
-  --text-hero: clamp(2.75rem, 6.5vw, 6.25rem);
+  --text-hero: clamp(2.15rem, 6vw, 6.25rem);
 
   /* Tracking (Letter Spacing) */
   --tracking-tighter: -0.04em;

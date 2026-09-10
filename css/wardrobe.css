@@ -384,8 +384,14 @@
 
 @media (max-width: 640px) {
   .wardrobe-stat-strip {
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    padding: 1.5rem 1rem;
+    margin-bottom: 2.75rem;
+  }
+
+  .wardrobe-grid-section {
+    gap: 3.5rem;
   }
 
   .wardrobe-action-bar {
@@ -395,5 +401,48 @@
 
   .wardrobe-action-bar .btn {
     width: 100%;
+    min-height: 48px;
   }
 }
+
+@media (max-width: 480px) {
+  .wardrobe-view {
+    padding-top: 80px;
+    padding-bottom: 4rem;
+  }
+
+  .wardrobe-hero-header {
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+  }
+
+  .capsule-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .garment-image-box {
+    height: 260px;
+  }
+
+  .garment-body {
+    padding: 1.25rem;
+  }
+
+  .outfits-matrix-container {
+    padding: 1.25rem;
+  }
+
+  .outfit-timeline-pill {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1rem;
+  }
+
+  .outfit-matrix-preview {
+    height: 240px;
+  }
+}
+

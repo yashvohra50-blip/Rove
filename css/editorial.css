@@ -1750,22 +1750,89 @@
     grid-template-columns: 1fr;
   }
 
+  /* Symmetrical 2x2 Metric Matrix on Mobile */
   .formula-strip {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    padding: 1.5rem;
+    padding: 1.5rem 1.25rem;
+    margin-bottom: 2.5rem;
   }
 
   .formula-arrow {
-    transform: rotate(90deg);
+    display: none;
+  }
+
+  /* Phase 11 Wardrobe Combiner Mobile Restructuring: Active Showcase FIRST, 6 Pieces SECOND */
+  .wardrobe-interactive-stage {
+    grid-template-columns: 1fr;
+    padding: 1.5rem 1.25rem;
+    gap: 2.25rem;
+  }
+
+  .outfit-display-column {
+    order: 1;
+  }
+
+  .capsule-inventory-column {
+    order: 2;
+  }
+
+  .outfit-selector-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.5rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .outfit-tab-btn {
+    min-height: 44px;
+    padding: 0.75rem 1.15rem;
   }
 
   .active-outfit-showcase {
     grid-template-columns: 1fr;
+    padding: 1.5rem;
   }
 
   .outfit-hero-visual {
     height: 260px;
+  }
+
+  /* Simplified 2-Column Compact Master Pieces Grid */
+  .inventory-item-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .inventory-piece-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .piece-thumb {
+    width: 100%;
+    height: 84px;
+    border-radius: var(--radius-xs);
+  }
+
+  .piece-info {
+    width: 100%;
+  }
+
+  .piece-title {
+    font-size: 0.75rem;
+    white-space: normal;
+    line-height: 1.25;
+  }
+
+  .piece-fabric,
+  .piece-versatility {
+    display: none;
   }
 
   .chapter-card,
@@ -1790,7 +1857,8 @@
   .chapter-sticky-stage {
     position: relative;
     height: auto;
-    padding: 5rem 1.25rem 2.5rem 1.25rem;
+    padding: 4.5rem 1.25rem 2.5rem 1.25rem;
+    overflow: hidden;
   }
 
   .chapter-editorial-stage {
@@ -1820,7 +1888,7 @@
     display: none;
   }
 
-  /* Phase 4 Mobile Trip Context Story Fallback */
+  /* Phase 4 Mobile Trip Context Story Fallback (Zero Horizontal Overflow) */
   .context-story-track {
     min-height: auto;
   }
@@ -1828,8 +1896,16 @@
   .context-story-stage {
     position: relative;
     height: auto;
-    padding: 4.5rem 1.25rem 3.5rem 1.25rem;
-    gap: 3.5rem;
+    padding: 4rem 1.25rem 3rem 1.25rem;
+    gap: 3rem;
+    overflow: hidden;
+  }
+
+  .context-story-env,
+  .env-ambient-glow {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .context-sequence-container {
@@ -1883,7 +1959,7 @@
   }
 
   .seq-headline {
-    font-size: clamp(2.2rem, 9vw, 3.25rem);
+    font-size: clamp(2rem, 8.5vw, 3.25rem);
     line-height: 1.05;
   }
 
@@ -1891,7 +1967,7 @@
     display: none;
   }
 
-  /* Phase 5 Mobile Story Pipeline Fallback */
+  /* Phase 5 Mobile Story Pipeline Fallback (Contained Ambient Glow) */
   .story-pipeline-track {
     min-height: auto;
   }
@@ -1900,8 +1976,14 @@
     position: relative;
     height: auto;
     padding: 2.5rem 1.25rem 4rem 1.25rem;
-    overflow: visible;
+    overflow: hidden;
     gap: 2.5rem;
+  }
+
+  .story-ambient-glow {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .story-ghost-num {
@@ -1947,12 +2029,48 @@
   }
 
   .stage-headline {
-    font-size: clamp(2rem, 7vw, 3rem) !important;
+    font-size: clamp(1.85rem, 7vw, 3rem) !important;
     line-height: 1.1 !important;
   }
 
   .stage-desc {
     font-size: 1.05rem !important;
+  }
+
+  /* Phase 12: Disable GPU-heavy ambient drift keyframes on mobile to preserve battery & lock 60fps */
+  .chapter-sticky-stage::before,
+  .env-ambient-glow,
+  .story-ambient-glow,
+  .killer-section::before {
+    animation: none !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+/* Small mobile viewports (<480px) */
+@media (max-width: 480px) {
+  .chapter-card,
+  .module-panel {
+    height: auto;
+    min-height: 400px;
+    padding: 1.75rem 1.25rem;
+  }
+
+  .inventory-item-list {
+    grid-template-columns: 1fr;
+  }
+
+  .active-outfit-showcase {
+    padding: 1.25rem;
+    min-height: auto;
+  }
+
+  .outfit-hero-visual {
+    height: 220px;
+  }
+
+  .seq-headline {
+    font-size: clamp(1.85rem, 8.5vw, 2.75rem);
   }
 }
 

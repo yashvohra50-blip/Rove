@@ -124,16 +124,23 @@ export class Navbar {
 
     if (buildBtn) buildBtn.addEventListener('click', triggerBuilder);
     if (mobileBuildBtn) mobileBuildBtn.addEventListener('click', triggerBuilder);
+    this.scrollTicking = false;
   }
 
   handleScroll() {
-    const nav = this.mountPoint.querySelector('#mainNavbar');
-    if (!nav) return;
-    if (window.scrollY > 40) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
+    if (this.scrollTicking) return;
+    this.scrollTicking = true;
+    requestAnimationFrame(() => {
+      const nav = this.mountPoint.querySelector('#mainNavbar');
+      if (nav) {
+        if (window.scrollY > 40) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      }
+      this.scrollTicking = false;
+    });
   }
 
   toggleMobileMenu(open) {

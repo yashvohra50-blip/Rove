@@ -341,6 +341,7 @@
   padding: 0.625rem 1.125rem;
   font-size: var(--text-2xs);
   letter-spacing: 0.18em;
+  min-height: 44px;
 }
 
 /* Large Button */
@@ -482,6 +483,11 @@
   line-height: 1;
   padding: 0;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: color var(--transition-fast);
 }
 
@@ -519,15 +525,37 @@
 
   .mobile-toggle {
     display: flex;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .toast-container {
-    left: 1.25rem;
-    right: 1.25rem;
-    bottom: 1.25rem;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
   }
 
   .toast {
     min-width: 100%;
+  }
+}
+
+/* Small mobile screens (<480px) */
+@media (max-width: 480px) {
+  #navBuildTripBtn {
+    display: none;
+  }
+
+  .brand-logo {
+    font-size: 1.35rem;
+  }
+
+  .mobile-link {
+    font-size: 1.65rem;
+    padding: 0.35rem 0;
+  }
+
+  .mobile-menu {
+    padding: 90px 1.5rem 2.5rem 1.5rem;
   }
 }
