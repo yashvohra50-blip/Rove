@@ -400,98 +400,258 @@
 }
 
 /* --------------------------------------------------------------------------
-   2. SECTION — HOW ROVE THINKS (Sequential Storytelling Flow)
+   2. SECTION — HOW ROVE THINKS (Phase 5 Scroll-Driven Storytelling Pipeline)
+   01 DESTINATION -> 02 WEATHER -> 03 ACTIVITIES -> 04 DURATION
+   05 YOUR STYLE -> 06 YOUR WARDROBE -> 07 OUTFITS -> 08 PACKING
    -------------------------------------------------------------------------- */
 .story-section {
   position: relative;
   background: var(--bg-primary);
-  padding-top: clamp(6rem, 10vw, 9rem);
-  padding-bottom: clamp(6rem, 10vw, 9rem);
+  width: 100%;
 }
 
-.story-header {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto clamp(3.5rem, 6vw, 5.5rem) auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.story-flow-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+.story-header-wrap {
+  padding-top: clamp(5rem, 8vw, 7rem);
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
   position: relative;
+  z-index: 2;
 }
 
-.story-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xs);
-  padding: 2.25rem 1.75rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 260px;
-  position: relative;
-  transition: transform var(--transition-normal), border-color var(--transition-normal), background-color var(--transition-normal);
-  cursor: default;
-}
-
-.story-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--border-focus);
-  background: var(--bg-tertiary);
-}
-
-.story-card-step {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.75rem;
-}
-
-.story-step-num {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: 0.2em;
-  color: var(--accent-primary);
-}
-
-.story-card-icon {
-  width: 28px;
-  height: 28px;
-  color: var(--text-tertiary);
-  transition: color var(--transition-fast);
-}
-
-.story-card:hover .story-card-icon {
-  color: var(--accent-primary);
-}
-
-.story-card-title {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-primary);
-  margin-bottom: 0.75rem;
-}
-
-.story-card-desc {
-  font-size: var(--text-xs);
+.story-subtitle {
+  max-width: 58ch;
+  margin: 1.25rem auto 0 auto;
   color: var(--text-secondary);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
   line-height: 1.6;
 }
 
-.story-flow-arrow {
+/* Scroll-Driven Pipeline Track (Desktop) */
+.story-pipeline-track {
+  position: relative;
+  min-height: 520vh;
+  width: 100%;
+}
+
+.story-pipeline-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem 1.5rem 2.5rem 1.5rem;
+  overflow: hidden;
+  z-index: 3;
+}
+
+/* Atmospheric Ambient Mesh */
+.story-ambient-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 122, 0.12) 0%, transparent 65%);
+  transition: background 0.6s var(--ease-out-expo);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Giant Ghost Watermark Numeral */
+.story-ghost-num {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(16rem, 32vw, 28rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #FFFFFF;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Subtle Top/Rail Progress Indicator */
+.story-progress-indicator {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+.story-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 0.25rem;
+}
+
+.story-progress-tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.2em;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+.story-progress-counter {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.15em;
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.story-progress-trackbar {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.story-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(212, 175, 122, 0.4), var(--accent-primary));
+  transition: width 0.1s linear;
+}
+
+.story-progress-steps {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+}
+
+.story-nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.story-nav-dot:hover {
+  background: var(--text-secondary);
+  transform: scale(1.25);
+}
+
+.story-nav-dot.is-active {
+  background: var(--accent-primary);
+  transform: scale(1.4);
+  box-shadow: 0 0 10px rgba(212, 175, 122, 0.6);
+}
+
+/* Dominant Central Stage Container */
+.story-dominant-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 880px;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-stage-item {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  transition: color var(--transition-fast);
+}
+
+.stage-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stage-step-pill {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--accent-primary);
+  background: rgba(212, 175, 122, 0.10);
+  border: 1px solid rgba(212, 175, 122, 0.25);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+}
+
+.stage-icon-halo {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--accent-primary);
-  opacity: 0.6;
+  box-shadow: 0 0 20px rgba(212, 175, 122, 0.15);
+}
+
+.stage-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6.5vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.0;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.stage-desc {
+  font-family: var(--font-sans);
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  color: var(--text-secondary);
+  max-width: 48ch;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.stage-next-cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.stage-cue-line {
+  width: 1px;
+  height: 20px;
+  background: linear-gradient(180deg, rgba(212, 175, 122, 0.3), transparent);
+}
+
+.stage-cue-arrow {
+  font-size: 0.95rem;
+  color: var(--accent-primary);
+  opacity: 0.7;
 }
 
 /* --------------------------------------------------------------------------
@@ -1058,6 +1218,126 @@
 
   .context-stage-bottom {
     display: none;
+  }
+
+  /* Phase 5 Mobile Story Pipeline Fallback */
+  .story-pipeline-track {
+    min-height: auto;
+  }
+
+  .story-pipeline-stage {
+    position: relative;
+    height: auto;
+    padding: 2.5rem 1.25rem 4rem 1.25rem;
+    overflow: visible;
+    gap: 2.5rem;
+  }
+
+  .story-ghost-num {
+    display: none;
+  }
+
+  .story-progress-indicator {
+    position: sticky;
+    top: 72px;
+    background: rgba(10, 10, 12, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    margin-bottom: 1.5rem;
+  }
+
+  .story-dominant-container {
+    position: relative;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .story-stage-item {
+    position: relative !important;
+    inset: auto !important;
+    width: 100%;
+    height: auto;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 2.5rem 1.75rem;
+    gap: 1.25rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  .stage-headline {
+    font-size: clamp(2rem, 7vw, 3rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  .stage-desc {
+    font-size: 1.05rem !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility & Reduced Motion Standards (Zero Animation Fallback)
+   Ensures 100% of information remains legible, structured, and comprehensible
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .story-pipeline-track,
+  .context-story-track,
+  .chapter-scroll-track {
+    min-height: auto !important;
+  }
+
+  .story-pipeline-stage,
+  .context-story-stage,
+  .chapter-sticky-stage {
+    position: relative !important;
+    height: auto !important;
+    padding: 3rem 1.5rem !important;
+    overflow: visible !important;
+  }
+
+  .story-dominant-container,
+  .context-sequence-container {
+    position: relative !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+  }
+
+  .story-stage-item,
+  .context-seq-item {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 2.5rem 1.75rem !important;
+  }
+
+  .story-ghost-num {
+    display: none !important;
+  }
+
+  .chapter-phrase-1,
+  .chapter-phrase-2 {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
