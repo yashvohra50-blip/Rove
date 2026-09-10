@@ -175,103 +175,228 @@
   color: var(--text-tertiary);
 }
 
-/* Lower Section: Trip Context Matrix (Follows after Chapter Transition) */
-.problem-context-stage {
+/* --------------------------------------------------------------------------
+   Phase 4: Cinematic Trip Context Story (Jaipur Sequence)
+   JAIPUR -> 32°C -> 5 DAYS -> 8 KM / DAY -> 2 DINNERS -> 1 BAG -> LET'S PACK.
+   -------------------------------------------------------------------------- */
+.context-story-section {
   position: relative;
-  z-index: 5;
-  padding-top: clamp(2rem, 5vw, 4rem);
-  padding-bottom: clamp(6rem, 10vw, 9rem);
+  background: var(--bg-primary);
+  width: 100%;
+}
+
+.context-story-track {
+  position: relative;
+  min-height: 440vh;
+  width: 100%;
+}
+
+.context-story-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: var(--space-3xl);
-}
-
-/* Context Demonstration Strip (Jaipur Case Study) */
-.problem-context-card {
-  width: 100%;
-  max-width: 1080px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: clamp(1.75rem, 3.5vw, 3rem);
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-}
-
-.context-card-header {
-  display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 1.5rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
+  overflow: hidden;
+  padding: 2.5rem 1.5rem;
+  z-index: 4;
 }
 
-.context-location {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  text-align: left;
+/* Atmospheric Environmental Layers */
+.context-story-env {
+  position: absolute;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
 }
 
-.context-meta-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1.5rem;
+.env-bg-image-wrap {
+  position: absolute;
+  inset: 0;
   width: 100%;
+  height: 100%;
 }
 
-.context-stat-node {
+.env-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  filter: brightness(0.26) contrast(1.2) saturate(0.85);
+  transform-origin: center center;
+  will-change: transform;
+  transition: transform 0.2s ease-out;
+}
+
+.env-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(10, 10, 12, 0.42) 0%, rgba(10, 10, 12, 0.88) 72%, #0A0A0C 100%),
+    linear-gradient(180deg, #0A0A0C 0%, rgba(10, 10, 12, 0.35) 30%, rgba(10, 10, 12, 0.8) 78%, #0A0A0C 100%);
+}
+
+.env-ambient-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(214, 118, 92, 0.18) 0%, transparent 70%);
+  transition: background 0.65s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+/* Stage Top Header */
+.context-stage-top {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.context-eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(18, 18, 22, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  padding: 0.45rem 1.15rem;
+  border-radius: var(--radius-full);
+}
+
+.eyebrow-separator {
+  color: var(--accent-primary);
+  opacity: 0.6;
+  font-size: 0.75rem;
+}
+
+/* Central Focal Sequence Stage */
+.context-sequence-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 960px;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.context-seq-item {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-  border-left: 1px solid var(--border-subtle);
-  padding-left: 1.25rem;
-  transition: border-color var(--transition-normal);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.25rem;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  transition: color var(--transition-fast);
 }
 
-.context-stat-node:hover {
-  border-left-color: var(--accent-primary);
-}
-
-.context-stat-value {
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 2.4vw, 2rem);
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-}
-
-.context-stat-label {
+.seq-sub-label {
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--accent-primary);
+  opacity: 0.9;
 }
 
-.problem-cta-moment {
+.seq-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 7.5vw, 6.25rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.seq-headline-accent {
+  color: var(--accent-primary);
+  text-shadow: 0 0 40px rgba(212, 175, 122, 0.4);
+}
+
+.seq-descriptor {
+  font-family: var(--font-sans);
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  font-weight: 400;
+  color: var(--text-secondary);
+  max-width: 54ch;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.seq-action-wrap {
+  margin-top: 1rem;
+}
+
+/* Stage Bottom Indicators & Connectors */
+.context-stage-bottom {
+  position: relative;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
-  margin-top: 1rem;
+  padding-bottom: 1rem;
 }
 
-.problem-manifesto-line {
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-  font-weight: 800;
-  letter-spacing: 0.15em;
+.context-step-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+}
+
+.context-connector-arrow {
   color: var(--accent-primary);
-  text-transform: uppercase;
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0.8;
+  animation: floatBounce 2s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.context-timeline-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.context-timeline-dots .t-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.18);
+  transition: all 0.35s var(--ease-out-expo);
+}
+
+.context-timeline-dots .t-dot.is-active {
+  width: 24px;
+  background: var(--accent-primary);
+  box-shadow: 0 0 12px rgba(212, 175, 122, 0.6);
 }
 
 /* --------------------------------------------------------------------------
@@ -863,4 +988,76 @@
   .chapter-progress-strip {
     display: none;
   }
+
+  /* Phase 4 Mobile Trip Context Story Fallback */
+  .context-story-track {
+    min-height: auto;
+  }
+
+  .context-story-stage {
+    position: relative;
+    height: auto;
+    padding: 4.5rem 1.25rem 3.5rem 1.25rem;
+    gap: 3.5rem;
+  }
+
+  .context-sequence-container {
+    height: auto;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  .context-seq-item {
+    position: relative !important;
+    inset: auto !important;
+    width: 100%;
+    height: auto;
+    min-height: 44vh;
+    opacity: 0.38;
+    transform: none !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 2.75rem;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .context-seq-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .context-seq-item.is-mobile-focus {
+    opacity: 1;
+    transform: scale(1.02) !important;
+  }
+
+  .context-seq-item.is-mobile-focus .seq-headline {
+    color: var(--accent-primary);
+  }
+
+  .context-seq-item::after {
+    content: '↓';
+    display: block;
+    color: var(--accent-primary);
+    font-size: 1.25rem;
+    margin-top: 1.75rem;
+    opacity: 0.65;
+  }
+
+  .context-seq-item:last-child::after {
+    display: none;
+  }
+
+  .seq-headline {
+    font-size: clamp(2.2rem, 9vw, 3.25rem);
+    line-height: 1.05;
+  }
+
+  .context-stage-bottom {
+    display: none;
+  }
 }
+
