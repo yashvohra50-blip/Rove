@@ -1,11 +1,14 @@
 /**
  * ROVE — KillerIdeaSection Component
  * "PACK LESS. WEAR MORE."
- * 6 PIECES -> 8 OUTFITS -> 5 DAYS -> 1 BAG
- * Live Interactive Combinatorial Wardrobe Engine
+ * 6 PIECES -> 8 OUTFITS -> 5 DAYS -> 1 BAG -> NOTHING EXTRA.
+ * 
+ * Phase 6: Major Product Showcase
+ * Step 1: Static Composition & Elevated Assets
  */
 
 import { JAIPUR_CAPSULE_PIECES, JAIPUR_OUTFITS } from '../data/mockData.js';
+import { store } from '../store.js';
 
 export class KillerIdeaSection {
   constructor(mountPoint) {
@@ -36,26 +39,30 @@ export class KillerIdeaSection {
             </p>
           </div>
 
-          <!-- Formula Strip -->
-          <div class="formula-strip reveal-on-scroll stagger-1">
+          <!-- Formula Strip: 6 PIECES -> 8 OUTFITS -> 5 DAYS -> 1 BAG -->
+          <div class="formula-strip reveal-on-scroll stagger-1" id="formulaStrip">
             <div class="formula-node">
               <span class="formula-value">6</span>
               <span class="formula-label">PIECES</span>
+              <span class="formula-sub">FOUNDATIONAL CAPSULE</span>
             </div>
             <div class="formula-arrow">→</div>
             <div class="formula-node">
               <span class="formula-value">8</span>
               <span class="formula-label">OUTFITS</span>
+              <span class="formula-sub">COMBINATORIAL LOOKS</span>
             </div>
             <div class="formula-arrow">→</div>
             <div class="formula-node">
               <span class="formula-value">5</span>
               <span class="formula-label">DAYS</span>
+              <span class="formula-sub">MODULAR ROTATION</span>
             </div>
             <div class="formula-arrow">→</div>
             <div class="formula-node">
               <span class="formula-value">1</span>
               <span class="formula-label">CABIN BAG</span>
+              <span class="formula-sub">38L SPECIFICATION</span>
             </div>
           </div>
 
@@ -78,6 +85,8 @@ export class KillerIdeaSection {
                       <div class="piece-info">
                         <span class="piece-title">${piece.name}</span>
                         <span class="piece-category">${piece.role} · ${piece.category}</span>
+                        <span class="piece-fabric">${piece.fabric}</span>
+                        <span class="piece-versatility">${piece.versatility}</span>
                       </div>
                     </div>
                   `;
@@ -133,21 +142,73 @@ export class KillerIdeaSection {
 
           </div>
 
+          <!-- Final Payoff: NOTHING EXTRA. -->
+          <div class="killer-payoff-banner reveal-on-scroll" id="payoffBanner">
+            <div class="payoff-content">
+              <span class="caps-label-accent">THE MATHEMATICAL RESOLUTION</span>
+              <h3 class="payoff-headline">NOTHING EXTRA.</h3>
+              <p class="payoff-desc">
+                Every garment is worn multiple times across daytime exploring and evening dining. Zero redundant layers. 1 standard carry-on cabin bag. Absolute travel freedom.
+              </p>
+              
+              <div class="payoff-stat-strip">
+                <div class="payoff-stat-node">
+                  <span class="payoff-stat-value">100%</span>
+                  <span class="payoff-stat-label">WEAR EFFICIENCY</span>
+                </div>
+                <div class="payoff-stat-node">
+                  <span class="payoff-stat-value">38L</span>
+                  <span class="payoff-stat-label">CABIN VOLUME</span>
+                </div>
+                <div class="payoff-stat-node">
+                  <span class="payoff-stat-value">0</span>
+                  <span class="payoff-stat-label">CHECKED BAGS</span>
+                </div>
+              </div>
+
+              <button class="btn btn-accent btn-lg" id="payoffPackBtn">
+                ASSEMBLE YOUR CAPSULE
+              </button>
+            </div>
+          </div>
+
         </div>
       </section>
     `;
   }
 
   bindEvents() {
+    // Outfit tab buttons
     const tabsContainer = this.mountPoint.querySelector('#outfitTabs');
-    if (!tabsContainer) return;
+    if (tabsContainer) {
+      tabsContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.outfit-tab-btn');
+        if (!btn) return;
+        const idx = parseInt(btn.getAttribute('data-outfit-idx'), 10);
+        this.switchOutfit(idx);
+      });
+    }
 
-    tabsContainer.addEventListener('click', (e) => {
-      const btn = e.target.closest('.outfit-tab-btn');
-      if (!btn) return;
-      const idx = parseInt(btn.getAttribute('data-outfit-idx'), 10);
-      this.switchOutfit(idx);
+    // Piece cards click to toggle / inspect
+    const pieceCards = this.mountPoint.querySelectorAll('.inventory-piece-card');
+    pieceCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const pieceId = card.getAttribute('data-piece-id');
+        // Find the first outfit featuring this piece
+        const targetOutfitIdx = this.outfits.findIndex(o => o.pieces.includes(pieceId));
+        if (targetOutfitIdx !== -1) {
+          this.switchOutfit(targetOutfitIdx);
+        }
+      });
     });
+
+    // Payoff Call to Action button
+    const payoffBtn = this.mountPoint.querySelector('#payoffPackBtn');
+    if (payoffBtn) {
+      payoffBtn.addEventListener('click', () => {
+        store.openBuilder(1);
+      });
+    }
   }
 
   switchOutfit(index) {
@@ -184,10 +245,10 @@ export class KillerIdeaSection {
     const components = this.mountPoint.querySelector('#outfitComponents');
 
     if (heroImg) {
-      heroImg.style.opacity = '0.3';
+      heroImg.classList.add('is-transforming');
       setTimeout(() => {
         heroImg.src = activeOutfit.image;
-        heroImg.style.opacity = '1';
+        heroImg.classList.remove('is-transforming');
       }, 140);
     }
 

@@ -762,15 +762,25 @@
   background: var(--bg-tertiary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xs);
-  transition: all var(--transition-fast);
+  transition: transform 0.35s var(--ease-out-expo), opacity 0.35s ease, border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.35s ease;
   cursor: pointer;
   position: relative;
+  opacity: 0.45;
+  will-change: transform, opacity;
+}
+
+.inventory-piece-card:hover {
+  opacity: 0.85;
+  border-color: var(--border-strong);
+  transform: translate3d(2px, 0, 0);
 }
 
 .inventory-piece-card.active-in-outfit {
+  opacity: 1;
   border-color: var(--accent-primary);
-  background: rgba(212, 175, 122, 0.08);
-  transform: translateX(4px);
+  background: rgba(212, 175, 122, 0.09);
+  transform: translate3d(6px, 0, 0);
+  box-shadow: 0 4px 16px rgba(212, 175, 122, 0.12);
 }
 
 .inventory-piece-card.active-in-outfit::before {
@@ -781,6 +791,30 @@
   bottom: 0;
   width: 3px;
   background: var(--accent-primary);
+  border-radius: 2px 0 0 2px;
+}
+
+/* Individual Piece Entrance Animations */
+.reveal-on-scroll.is-visible .inventory-piece-card:nth-child(1) { animation: pieceEnter 0.5s 0.08s var(--ease-out-expo) both; }
+.reveal-on-scroll.is-visible .inventory-piece-card:nth-child(2) { animation: pieceEnter 0.5s 0.14s var(--ease-out-expo) both; }
+.reveal-on-scroll.is-visible .inventory-piece-card:nth-child(3) { animation: pieceEnter 0.5s 0.20s var(--ease-out-expo) both; }
+.reveal-on-scroll.is-visible .inventory-piece-card:nth-child(4) { animation: pieceEnter 0.5s 0.26s var(--ease-out-expo) both; }
+.reveal-on-scroll.is-visible .inventory-piece-card:nth-child(5) { animation: pieceEnter 0.5s 0.32s var(--ease-out-expo) both; }
+.reveal-on-scroll.is-visible .inventory-piece-card:nth-child(6) { animation: pieceEnter 0.5s 0.38s var(--ease-out-expo) both; }
+
+@keyframes pieceEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(-18px, 0, 0);
+  }
+  to {
+    opacity: 0.45;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.reveal-on-scroll.is-visible .inventory-piece-card.active-in-outfit {
+  opacity: 1;
 }
 
 .piece-thumb {
@@ -881,7 +915,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-cinematic);
+  transition: transform var(--transition-cinematic), opacity 0.28s var(--ease-out-expo);
+  will-change: transform, opacity;
+}
+
+.outfit-hero-img.is-transforming {
+  opacity: 0.2;
+  transform: scale(1.05);
 }
 
 .outfit-hero-visual:hover .outfit-hero-img {
@@ -935,6 +975,108 @@
   height: 6px;
   border-radius: 50%;
   background: var(--accent-primary);
+}
+
+.formula-sub {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+
+.piece-fabric {
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  line-height: 1.3;
+}
+
+.piece-versatility {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--accent-primary);
+  margin-top: 0.15rem;
+}
+
+/* Payoff Banner: NOTHING EXTRA. */
+.killer-payoff-banner {
+  margin-top: 3.5rem;
+  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 122, 0.08) 0%, rgba(18, 18, 22, 0.95) 75%), var(--bg-secondary);
+  border: 1px solid var(--border-focus);
+  border-radius: var(--radius-sm);
+  padding: clamp(2.5rem, 5vw, 4.5rem) 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.payoff-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.payoff-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6.5vw, 4.75rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  line-height: 1;
+  text-shadow: 0 0 48px rgba(212, 175, 122, 0.4);
+  margin: 0;
+}
+
+.payoff-desc {
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 52ch;
+  margin: 0;
+}
+
+.payoff-stat-strip {
+  display: flex;
+  justify-content: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  flex-wrap: wrap;
+  padding: 1.25rem 0;
+  width: 100%;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  margin: 0.5rem 0;
+}
+
+.payoff-stat-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.payoff-stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.payoff-stat-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.18em;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
 }
 
 /* --------------------------------------------------------------------------
