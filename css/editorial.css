@@ -775,6 +775,16 @@
   transform: translate3d(2px, 0, 0);
 }
 
+.inventory-piece-card:active {
+  transform: translate3d(2px, 0, 0) scale(0.98);
+  transition: transform 0.08s ease;
+}
+
+.inventory-piece-card:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
 .inventory-piece-card.active-in-outfit {
   opacity: 1;
   border-color: var(--accent-primary);
@@ -888,6 +898,16 @@
   background: var(--text-primary);
   color: var(--text-inverse);
   border-color: var(--text-primary);
+}
+
+.outfit-tab-btn:active {
+  transform: scale(0.96);
+  transition: transform 0.08s ease;
+}
+
+.outfit-tab-btn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .active-outfit-showcase {
@@ -1586,11 +1606,17 @@
   color: var(--text-primary);
   font-size: var(--text-sm);
   outline: none;
-  transition: border-color 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  caret-color: var(--accent-primary);
+}
+
+.modal-input:hover {
+  border-color: var(--border-strong);
 }
 
 .modal-input:focus {
   border-color: var(--accent-primary);
+  box-shadow: var(--shadow-input-focus);
 }
 
 /* Responsive Media Queries */

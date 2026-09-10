@@ -142,9 +142,19 @@
 }
 
 .garment-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-card);
+  transform: translate3d(0, -6px, 0);
+  border-color: rgba(212, 175, 122, 0.35);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.garment-card:active {
+  transform: scale(0.99);
+  transition: transform 0.08s ease;
+}
+
+.garment-card:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
 }
 
 .garment-image-box {

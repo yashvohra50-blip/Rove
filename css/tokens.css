@@ -128,4 +128,16 @@
   --z-nav: 100;
   --z-modal: 200;
   --z-toast: 300;
+
+  /* ------------------------------------------------------------------------
+     7. MICRO-INTERACTION & TACTILE TOKENS (Phase 9)
+     ------------------------------------------------------------------------ */
+  --press-scale: scale(0.97);
+  --press-scale-card: scale(0.985);
+  --focus-ring: 2px solid var(--accent-primary);
+  --focus-offset: 3px;
+  --shadow-button-hover: 0 4px 20px rgba(212, 175, 122, 0.28);
+  --shadow-chip-active: 0 0 16px rgba(212, 175, 122, 0.24);
+  --shadow-input-focus: 0 0 16px rgba(212, 175, 122, 0.20);
 }
+

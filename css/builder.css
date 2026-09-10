@@ -85,6 +85,15 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
+.builder-close-btn:active {
+  transform: scale(0.92);
+}
+
+.builder-close-btn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
 /* Modal Content Container */
 .builder-stage {
   flex: 1;
@@ -177,6 +186,7 @@
 
 .destination-text-input:focus {
   border-bottom-color: var(--accent-primary);
+  box-shadow: 0 2px 0 var(--accent-primary), 0 10px 20px -10px rgba(212, 175, 122, 0.25);
 }
 
 .destination-suggestions-label {
@@ -214,18 +224,30 @@
   cursor: pointer;
   transition: all var(--transition-fast);
   user-select: none;
+  outline: none;
 }
 
 .option-box:hover {
-  border-color: var(--border-strong);
+  border-color: rgba(212, 175, 122, 0.4);
   background: var(--bg-tertiary);
-  transform: translateY(-2px);
+  transform: translate3d(0, -3px, 0);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.option-box:active {
+  transform: scale(0.97);
+  transition: transform 0.08s ease;
+}
+
+.option-box:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
 }
 
 .option-box.selected {
-  background: rgba(212, 175, 122, 0.09);
+  background: rgba(212, 175, 122, 0.10);
   border-color: var(--accent-primary);
-  box-shadow: 0 0 16px var(--accent-subtle);
+  box-shadow: 0 0 18px var(--accent-subtle);
 }
 
 .option-title {
@@ -263,16 +285,30 @@
   border-radius: var(--radius-xs);
   cursor: pointer;
   transition: all var(--transition-fast);
+  outline: none;
+  user-select: none;
 }
 
 .activity-chip:hover {
   background: var(--bg-tertiary);
-  border-color: var(--border-strong);
+  border-color: rgba(212, 175, 122, 0.35);
+  transform: translate3d(0, -1px, 0);
+}
+
+.activity-chip:active {
+  transform: scale(0.97);
+  transition: transform 0.08s ease;
+}
+
+.activity-chip:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .activity-chip.selected {
-  background: rgba(212, 175, 122, 0.09);
+  background: rgba(212, 175, 122, 0.10);
   border-color: var(--accent-primary);
+  box-shadow: var(--shadow-chip-active);
 }
 
 .activity-name {

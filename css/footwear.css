@@ -55,9 +55,19 @@
 }
 
 .archetype-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-card);
+  transform: translate3d(0, -6px, 0);
+  border-color: rgba(212, 175, 122, 0.38);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65), 0 0 24px rgba(212, 175, 122, 0.10);
+}
+
+.archetype-card:active {
+  transform: scale(0.99);
+  transition: transform 0.08s ease;
+}
+
+.archetype-card:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
 }
 
 .archetype-media-frame {

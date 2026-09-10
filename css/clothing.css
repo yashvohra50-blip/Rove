@@ -62,17 +62,29 @@
   text-transform: uppercase;
   color: var(--text-secondary);
   transition: all var(--transition-fast);
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.85rem;
   border-radius: var(--radius-xs);
+  outline: none;
 }
 
 .category-nav-btn:hover {
   color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.category-nav-btn:active {
+  transform: scale(0.96);
+  transition: transform 0.08s ease;
 }
 
 .category-nav-btn.active {
   color: #0A0A0C;
   background: var(--accent-primary);
+}
+
+.category-nav-btn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
 }
 
 /* Editorial Category Showcases */
