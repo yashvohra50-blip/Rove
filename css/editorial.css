@@ -4,7 +4,8 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. SECTION — THE PROBLEM ("ROVE Packs for the Experience")
+   1. SECTION — THE PROBLEM ("YOU PACK FOR THE TRIP" -> "ROVE PACKS FOR THE EXPERIENCE")
+   Phase 3: Cinematic Chapter Transition Stage with Controlled Scroll Progression
    -------------------------------------------------------------------------- */
 .problem-section {
   position: relative;
@@ -14,43 +15,177 @@
   overflow: hidden;
 }
 
-.problem-editorial-wrap {
+/* Controlled Scroll Progression Track (Desktop) */
+.chapter-scroll-track {
+  position: relative;
+  min-height: 175vh;
+  width: 100%;
+}
+
+/* Sticky Viewport Stage */
+.chapter-sticky-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Subtle Architectural Background Imagery */
+.chapter-bg-layer {
+  position: absolute;
+  inset: -4%;
+  width: 108%;
+  height: 108%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.18;
+  transition: opacity 0.4s var(--ease-out-expo);
+  will-change: opacity, transform;
+}
+
+.chapter-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: brightness(0.4) contrast(1.25) saturate(0.8);
+}
+
+.chapter-bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(10, 10, 12, 0.4) 0%, rgba(10, 10, 12, 0.88) 75%, #0A0A0C 100%),
+    linear-gradient(180deg, #0A0A0C 0%, rgba(10, 10, 12, 0.3) 30%, rgba(10, 10, 12, 0.8) 85%, #0A0A0C 100%);
+  pointer-events: none;
+}
+
+/* Central Editorial Typography Stage */
+.chapter-editorial-stage {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1040px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.chapter-badge-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: opacity 0.3s ease-out;
+}
+
+/* Phrase 1: "YOU PACK FOR THE TRIP." */
+.chapter-phrase-1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.8vw, 3.85rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  line-height: 1.08;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  transition: color var(--transition-fast);
+}
+
+/* Vertical Transition Flow Connector */
+.chapter-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  height: 48px;
+  position: relative;
+}
+
+.chapter-connector-line {
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(212, 175, 122, 0.2), var(--accent-primary), rgba(212, 175, 122, 0.2));
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.chapter-connector-arrow {
+  color: var(--accent-primary);
+  font-size: 0.85rem;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+/* Phrase 2: "ROVE PACKS FOR THE EXPERIENCE." */
+.chapter-phrase-2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6.2vw, 5.25rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  line-height: 1.02;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.chapter-phrase-2 span {
+  color: var(--accent-primary);
+  text-shadow: 0 0 32px rgba(212, 175, 122, 0.35);
+}
+
+/* Controlled Scroll Progression Indicator */
+.chapter-progress-strip {
+  position: absolute;
+  bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.chapter-progress-pill {
+  width: 64px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.chapter-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--accent-primary);
+  transition: width 0.1s linear;
+}
+
+.chapter-progress-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.2em;
+  color: var(--text-tertiary);
+}
+
+/* Lower Section: Trip Context Matrix (Follows after Chapter Transition) */
+.problem-context-stage {
+  position: relative;
+  z-index: 5;
+  padding-top: clamp(2rem, 5vw, 4rem);
+  padding-bottom: clamp(6rem, 10vw, 9rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: var(--space-3xl);
-}
-
-.problem-contrast-lead {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  max-width: 900px;
-}
-
-.problem-subdued-phrase {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3.2vw, 2.5rem);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  transition: color var(--transition-normal);
-}
-
-.problem-highlight-phrase {
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 4.25rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  text-transform: uppercase;
-  line-height: 1.05;
-}
-
-.problem-highlight-phrase span {
-  color: var(--accent-primary);
 }
 
 /* Context Demonstration Strip (Jaipur Case Study) */
@@ -689,5 +824,43 @@
 
   .outfit-hero-visual {
     height: 260px;
+  }
+
+  /* Phase 3 Mobile Chapter Transition Fallback */
+  .chapter-scroll-track {
+    min-height: auto;
+  }
+
+  .chapter-sticky-stage {
+    position: relative;
+    height: auto;
+    padding: 5rem 1.25rem 2.5rem 1.25rem;
+  }
+
+  .chapter-editorial-stage {
+    gap: 1.5rem;
+    padding: 0;
+  }
+
+  .chapter-phrase-1 {
+    font-size: 1.85rem !important;
+    line-height: 1.15;
+    opacity: 0.55 !important;
+    transform: none !important;
+  }
+
+  .chapter-phrase-2 {
+    font-size: 2.25rem !important;
+    line-height: 1.1;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .chapter-connector {
+    height: 36px;
+  }
+
+  .chapter-progress-strip {
+    display: none;
   }
 }
