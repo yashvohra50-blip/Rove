@@ -47,7 +47,8 @@ export class Router {
     if (this.currentRoute === routeKey) return;
     this.currentRoute = routeKey;
 
-    // Transition: Leave -> Mount -> Enter
+    // Transition: Leave -> Mount -> Enter -> Entered
+    this.pageContainer.classList.remove('page-entered');
     this.pageContainer.classList.add('page-leaving');
 
     setTimeout(() => {
@@ -63,11 +64,14 @@ export class Router {
       this.pageContainer.classList.remove('page-leaving');
       this.pageContainer.classList.add('page-entering');
 
-      // Trigger formalized scroll observer for newly rendered elements
+      // Double rAF ensures DOM paint before triggering entered cascade
       requestAnimationFrame(() => {
-        this.pageContainer.classList.remove('page-entering');
-        globalScrollReveal.observeAll(this.pageContainer);
+        requestAnimationFrame(() => {
+          this.pageContainer.classList.remove('page-entering');
+          this.pageContainer.classList.add('page-entered');
+          globalScrollReveal.observeAll(this.pageContainer);
+        });
       });
-    }, 200);
+    }, 220);
   }
 }

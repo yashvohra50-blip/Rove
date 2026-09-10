@@ -23,14 +23,32 @@ export class ClothingView {
     this.mountPoint.innerHTML = `
       <div class="clothing-page" id="clothingPage">
         
-        <!-- Opening Editorial Header -->
-        <div class="container clothing-header-stage reveal-on-scroll">
-          <span class="caps-label-accent">THE FABRIC INTELLIGENCE</span>
-          <h1 class="clothing-main-title">CLOTHING</h1>
-          <p class="clothing-subtext">“Built around where you're going.”</p>
-          <p style="max-width: 50ch; color: var(--text-secondary); margin-top: 0.5rem;">
+        <!-- Shared Chapter Hero Stage -->
+        <div class="container chapter-hero-stage">
+          
+          <!-- Top Breadcrumb Bar -->
+          <div class="chapter-breadcrumb-bar">
+            <a href="#sectionModules" class="chapter-back-btn" id="clothingBackBtn">
+              <span>←</span>
+              <span>RETURN TO ROVE ECOSYSTEM</span>
+            </a>
+            <span class="chapter-num-pill">CHAPTER 01 / III</span>
+          </div>
+
+          <span class="caps-label-accent">THE FABRIC INTELLIGENCE · SYSTEM CORE</span>
+          <h1 class="chapter-main-title">CLOTHING</h1>
+          <p class="chapter-subtext">“Built around where you're going.”</p>
+          <p style="max-width: 52ch; color: var(--text-secondary); margin: 0.25rem auto 0 auto;">
             Every weave, weight, and fiber is calibrated for climate friction, transit endurance, and rapid overnight revitalization.
           </p>
+
+          <!-- Standardized 3-Pill Technical Meta Strip -->
+          <div class="chapter-meta-strip">
+            <span class="chapter-meta-item">TEXTILE SCIENCE</span>
+            <span class="chapter-meta-item">145G – 380G GSM WEAVES</span>
+            <span class="chapter-meta-item">RAPID OVERNIGHT RECOVERY</span>
+          </div>
+
         </div>
 
         <!-- Sticky Quick Navigation -->

@@ -23,15 +23,32 @@ export class FootwearView {
     this.mountPoint.innerHTML = `
       <div class="footwear-page" id="footwearPage">
         
-        <!-- Opening Editorial Header -->
-        <div class="container footwear-header-stage reveal-on-scroll">
-          <span class="caps-label-accent">THE FOUNDATION PILLAR</span>
-          <h1 class="footwear-main-title">FOOTWEAR</h1>
-          <p class="footwear-tagline">“THE RIGHT SHOE CHANGES THE TRIP.”</p>
-          <p style="max-width: 52ch; color: var(--text-secondary); margin-top: 0.5rem;">
-            Bad shoes cut a trip short. The wrong sole ruins dinner dress codes. 
-            ROVE curates exactly two shoes per voyage: one for relentless movement, one for atmospheric elevation.
+        <!-- Shared Chapter Hero Stage -->
+        <div class="container chapter-hero-stage">
+          
+          <!-- Top Breadcrumb Bar -->
+          <div class="chapter-breadcrumb-bar">
+            <a href="#sectionModules" class="chapter-back-btn" id="footwearBackBtn">
+              <span>←</span>
+              <span>RETURN TO ROVE ECOSYSTEM</span>
+            </a>
+            <span class="chapter-num-pill">CHAPTER 02 / III</span>
+          </div>
+
+          <span class="caps-label-accent">THE KINETIC FOUNDATION · PLATFORM SPEC</span>
+          <h1 class="chapter-main-title">FOOTWEAR</h1>
+          <p class="chapter-subtext">“The right shoe changes the trip.”</p>
+          <p style="max-width: 52ch; color: var(--text-secondary); margin: 0.25rem auto 0 auto;">
+            Bad shoes cut a voyage short. The wrong sole ruins dinner dress codes. ROVE curates exactly two pairs per voyage: one for relentless movement, one for atmospheric elevation.
           </p>
+
+          <!-- Standardized 3-Pill Technical Meta Strip -->
+          <div class="chapter-meta-strip">
+            <span class="chapter-meta-item">BIOMECHANICS</span>
+            <span class="chapter-meta-item">DUAL-DENSITY CUSHION</span>
+            <span class="chapter-meta-item">22,000+ DAILY STEPS</span>
+          </div>
+
         </div>
 
         <div class="container">
