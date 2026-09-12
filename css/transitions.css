@@ -365,7 +365,7 @@
   .page-view-container.page-entered {
     opacity: 1 !important;
     transform: none !important;
-    transition: none !important;
+    transition: opacity 0.2s ease !important;
   }
 
   .chapter-main-title,
@@ -374,6 +374,7 @@
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+    transition: opacity 0.2s ease !important;
   }
 }
 

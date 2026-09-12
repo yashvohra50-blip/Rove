@@ -44,14 +44,17 @@
 </head>
 <body>
 
+  <!-- Accessible Skip to Main Content Link -->
+  <a href="#appView" class="skip-link">Skip to main content</a>
+
   <!-- Persistent Navigation Mount Point -->
-  <div id="navMount"></div>
+  <header id="navMount" role="banner"></header>
 
   <!-- Dynamic Router View Container (Smooth Chapter Transitions) -->
-  <main id="appView" class="page-view-container" role="main"></main>
+  <main id="appView" class="page-view-container" role="main" tabindex="-1"></main>
 
   <!-- Persistent Brand Footer Mount Point -->
-  <div id="footerMount"></div>
+  <footer id="footerMount" role="contentinfo"></footer>
 
   <!-- Full-Screen 5-Step Trip Builder Modal Mount Point -->
   <div id="builderMount"></div>

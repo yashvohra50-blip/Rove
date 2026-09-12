@@ -93,6 +93,17 @@ export class Hero {
       });
     }
 
+    const exploreBtn = this.mountPoint.querySelector('#heroExploreBtn');
+    if (exploreBtn) {
+      exploreBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const problemSection = document.getElementById('sectionProblem');
+        if (problemSection) {
+          problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    }
+
     const scrollCue = this.mountPoint.querySelector('#heroScrollCue');
     if (scrollCue) {
       scrollCue.addEventListener('click', (e) => {

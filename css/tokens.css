@@ -24,7 +24,7 @@
   /* Typography Colors */
   --text-primary: #F5F4F0;     /* Warm off-white */
   --text-secondary: #9E9D97;   /* Muted architectural stone grey */
-  --text-tertiary: #676662;    /* Dim subtle label text */
+  --text-tertiary: #8A8882;    /* Elevated subtle label text (WCAG 2.2 AA compliant >4.5:1) */
   --text-inverse: #0A0A0C;
 
   /* ONE Restrained Premium Accent (Pale Champagne Gold / Brushed Bronze) */
@@ -38,7 +38,7 @@
   /* Status Colors */
   --status-ready: #7EB88F;
   --status-active: #D4AF7A;
-  --status-muted: #52525B;
+  --status-muted: #787882;
 
   /* ------------------------------------------------------------------------
      2. TYPOGRAPHY SYSTEM

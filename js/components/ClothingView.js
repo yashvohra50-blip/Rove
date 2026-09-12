@@ -27,13 +27,13 @@ export class ClothingView {
         <div class="container chapter-hero-stage">
           
           <!-- Top Breadcrumb Bar -->
-          <div class="chapter-breadcrumb-bar">
+          <nav class="chapter-breadcrumb-bar" aria-label="Breadcrumb">
             <a href="#sectionModules" class="chapter-back-btn" id="clothingBackBtn">
-              <span>←</span>
+              <span aria-hidden="true">←</span>
               <span>RETURN TO ROVE ECOSYSTEM</span>
             </a>
-            <span class="chapter-num-pill">CHAPTER 01 / III</span>
-          </div>
+            <span class="chapter-num-pill" aria-current="page">CHAPTER 01 / III</span>
+          </nav>
 
           <span class="caps-label-accent">THE FABRIC INTELLIGENCE · SYSTEM CORE</span>
           <h1 class="chapter-main-title">CLOTHING</h1>
@@ -52,11 +52,11 @@ export class ClothingView {
         </div>
 
         <!-- Sticky Quick Navigation -->
-        <div class="category-nav-bar" id="categoryNavBar">
+        <nav class="category-nav-bar" id="categoryNavBar" aria-label="Clothing Categories">
           ${this.categories.map(cat => `
             <a href="#cat_${cat.id}" class="category-nav-btn">${cat.name}</a>
           `).join('')}
-        </div>
+        </nav>
 
         <div class="container">
           ${this.categories.map((cat, idx) => `

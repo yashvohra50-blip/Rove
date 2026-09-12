@@ -27,13 +27,13 @@ export class FootwearView {
         <div class="container chapter-hero-stage">
           
           <!-- Top Breadcrumb Bar -->
-          <div class="chapter-breadcrumb-bar">
+          <nav class="chapter-breadcrumb-bar" aria-label="Breadcrumb">
             <a href="#sectionModules" class="chapter-back-btn" id="footwearBackBtn">
-              <span>←</span>
+              <span aria-hidden="true">←</span>
               <span>RETURN TO ROVE ECOSYSTEM</span>
             </a>
-            <span class="chapter-num-pill">CHAPTER 02 / III</span>
-          </div>
+            <span class="chapter-num-pill" aria-current="page">CHAPTER 02 / III</span>
+          </nav>
 
           <span class="caps-label-accent">THE KINETIC FOUNDATION · PLATFORM SPEC</span>
           <h1 class="chapter-main-title">FOOTWEAR</h1>

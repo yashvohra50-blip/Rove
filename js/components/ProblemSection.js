@@ -121,49 +121,49 @@ export class ProblemSection {
               <div class="context-sequence-container" id="jaipurSequenceContainer">
                 
                 <!-- Step 1: JAIPUR -->
-                <div class="context-seq-item" data-step="0">
+                <article class="context-seq-item" data-step="0" aria-label="Context 01: Jaipur Destination">
                   <span class="seq-sub-label">01 / DESTINATION</span>
                   <h2 class="seq-headline">JAIPUR</h2>
                   <p class="seq-descriptor">Rajasthan · Arid desert gateway & monumental pink stone</p>
-                </div>
+                </article>
 
                 <!-- Step 2: 32°C -->
-                <div class="context-seq-item" data-step="1">
+                <article class="context-seq-item" data-step="1" aria-label="Context 02: 32°C Climate Signal">
                   <span class="seq-sub-label">02 / CLIMATE SIGNAL</span>
                   <h2 class="seq-headline">32°C</h2>
                   <p class="seq-descriptor">High diurnal heat · Demands high-twist breathable linen & open-weave tailoring</p>
-                </div>
+                </article>
 
                 <!-- Step 3: 5 DAYS -->
-                <div class="context-seq-item" data-step="2">
+                <article class="context-seq-item" data-step="2" aria-label="Context 03: 5 Days Duration">
                   <span class="seq-sub-label">03 / DURATION</span>
                   <h2 class="seq-headline">5 DAYS</h2>
                   <p class="seq-descriptor">Modular wardrobe cycle · 6 garments rotate into 8 distinct silhouettes</p>
-                </div>
+                </article>
 
                 <!-- Step 4: 8 KM / DAY -->
-                <div class="context-seq-item" data-step="3">
+                <article class="context-seq-item" data-step="3" aria-label="Context 04: 8 KM / Day Movement & Terrain">
                   <span class="seq-sub-label">04 / MOVEMENT & TERRAIN</span>
                   <h2 class="seq-headline">8 KM / DAY</h2>
                   <p class="seq-descriptor">Historic fort ramparts & cobblestones · Dual-density technical footwear</p>
-                </div>
+                </article>
 
                 <!-- Step 5: 2 DINNERS -->
-                <div class="context-seq-item" data-step="4">
+                <article class="context-seq-item" data-step="4" aria-label="Context 05: 2 Dinners Evening Context">
                   <span class="seq-sub-label">05 / EVENING CONTEXT</span>
                   <h2 class="seq-headline">2 DINNERS</h2>
                   <p class="seq-descriptor">Haveli courtyards & rooftop sunsets · Elevated unstructured evening blazers</p>
-                </div>
+                </article>
 
                 <!-- Step 6: 1 BAG -->
-                <div class="context-seq-item" data-step="5">
+                <article class="context-seq-item" data-step="5" aria-label="Context 06: 1 Bag Constraint">
                   <span class="seq-sub-label">06 / THE CONSTRAINT</span>
                   <h2 class="seq-headline">1 BAG</h2>
                   <p class="seq-descriptor">38L Cabin specification · Zero checked luggage · Absolute travel freedom</p>
-                </div>
+                </article>
 
                 <!-- Step 7: LET'S PACK. -->
-                <div class="context-seq-item" data-step="6">
+                <article class="context-seq-item" data-step="6" aria-label="Context 07: Let's Pack Resolution">
                   <span class="seq-sub-label">07 / THE RESOLUTION</span>
                   <h2 class="seq-headline seq-headline-accent">LET'S PACK.</h2>
                   <p class="seq-descriptor">Capsule synthesized. 6 pieces. 2 shoes. 1 bag. Zero excess.</p>
@@ -172,7 +172,7 @@ export class ProblemSection {
                       PLAN A TRIP WITH ROVE
                     </button>
                   </div>
-                </div>
+                </article>
 
               </div>
 
@@ -181,14 +181,14 @@ export class ProblemSection {
                 <div class="context-step-connector">
                   <span class="context-connector-arrow">↓</span>
                 </div>
-                <div class="context-timeline-dots" id="jaipurTimelineDots">
-                  <span class="t-dot is-active" data-index="0"></span>
-                  <span class="t-dot" data-index="1"></span>
-                  <span class="t-dot" data-index="2"></span>
-                  <span class="t-dot" data-index="3"></span>
-                  <span class="t-dot" data-index="4"></span>
-                  <span class="t-dot" data-index="5"></span>
-                  <span class="t-dot" data-index="6"></span>
+                <div class="context-timeline-dots" id="jaipurTimelineDots" role="group" aria-label="Context signal indicators">
+                  <button class="t-dot is-active" data-index="0" aria-label="Context signal 1: Jaipur"></button>
+                  <button class="t-dot" data-index="1" aria-label="Context signal 2: 32°C"></button>
+                  <button class="t-dot" data-index="2" aria-label="Context signal 3: 5 Days"></button>
+                  <button class="t-dot" data-index="3" aria-label="Context signal 4: 8 KM / Day"></button>
+                  <button class="t-dot" data-index="4" aria-label="Context signal 5: 2 Dinners"></button>
+                  <button class="t-dot" data-index="5" aria-label="Context signal 6: 1 Bag"></button>
+                  <button class="t-dot" data-index="6" aria-label="Context signal 7: Let's Pack"></button>
                 </div>
               </div>
 
@@ -208,6 +208,19 @@ export class ProblemSection {
         store.openBuilder(1);
       });
     }
+
+    const track = this.mountPoint.querySelector('#jaipurStoryTrack');
+    const dots = this.mountPoint.querySelectorAll('#jaipurTimelineDots .t-dot');
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-index') || '0', 10);
+        if (track) {
+          const scrollableDist = track.offsetHeight - window.innerHeight;
+          const targetTop = track.getBoundingClientRect().top + window.pageYOffset + (idx / 6) * scrollableDist;
+          window.scrollTo({ top: targetTop, behavior: 'smooth' });
+        }
+      });
+    });
   }
 
   setupScrollProgression() {

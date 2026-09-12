@@ -92,16 +92,33 @@ export class WardrobeResult {
               </div>
 
               <!-- Day Tabs Navigation -->
-              <div class="outfit-timeline-nav" id="wardrobeOutfitTabs">
+              <div class="outfit-timeline-nav" id="wardrobeOutfitTabs" role="tablist" aria-label="Daily outfit looks">
                 ${wardrobe.outfits.map((outfit, idx) => `
-                  <button class="outfit-timeline-pill ${idx === this.activeOutfitIndex ? 'active' : ''}" data-idx="${idx}">
+                  <button 
+                    class="outfit-timeline-pill ${idx === this.activeOutfitIndex ? 'active' : ''}" 
+                    data-idx="${idx}"
+                    role="tab"
+                    id="wardrobe-tab-${idx}"
+                    aria-controls="outfitMatrixStage"
+                    aria-selected="${idx === this.activeOutfitIndex ? 'true' : 'false'}"
+                    tabindex="${idx === this.activeOutfitIndex ? '0' : '-1'}"
+                  >
                     ${outfit.day}
                   </button>
                 `).join('')}
               </div>
 
+              <!-- Live Region for Outfit Switch Announcements -->
+              <div class="sr-only" aria-live="polite" id="wardrobeOutfitAnnouncer"></div>
+
               <!-- Active Outfit Matrix View -->
-              <div class="outfit-matrix-stage" id="outfitMatrixStage">
+              <div 
+                class="outfit-matrix-stage" 
+                id="outfitMatrixStage"
+                role="tabpanel"
+                aria-labelledby="wardrobe-tab-${this.activeOutfitIndex}"
+                tabindex="0"
+              >
                 <div class="outfit-matrix-preview">
                   <img 
                     src="${activeOutfit.image}" 
@@ -194,11 +211,30 @@ export class WardrobeResult {
   }
 
   bindEvents() {
-    const tabs = this.mountPoint.querySelectorAll('#wardrobeOutfitTabs .outfit-timeline-pill');
-    tabs.forEach(tab => {
+    const tabs = Array.from(this.mountPoint.querySelectorAll('#wardrobeOutfitTabs .outfit-timeline-pill'));
+    tabs.forEach((tab, i) => {
       tab.addEventListener('click', () => {
         const idx = parseInt(tab.getAttribute('data-idx'), 10);
         this.switchOutfit(idx);
+      });
+
+      tab.addEventListener('keydown', (e) => {
+        let targetIdx = -1;
+        if (e.key === 'ArrowRight') {
+          targetIdx = (i + 1) % tabs.length;
+        } else if (e.key === 'ArrowLeft') {
+          targetIdx = (i - 1 + tabs.length) % tabs.length;
+        } else if (e.key === 'Home') {
+          targetIdx = 0;
+        } else if (e.key === 'End') {
+          targetIdx = tabs.length - 1;
+        }
+
+        if (targetIdx !== -1) {
+          e.preventDefault();
+          this.switchOutfit(targetIdx);
+          tabs[targetIdx]?.focus();
+        }
       });
     });
 
@@ -227,9 +263,25 @@ export class WardrobeResult {
     const outfit = wardrobe.outfits[idx];
     if (!outfit) return;
 
-    // Update active tab
+    // Update active tab & ARIA attributes
     const tabs = this.mountPoint.querySelectorAll('#wardrobeOutfitTabs .outfit-timeline-pill');
-    tabs.forEach((tab, i) => tab.classList.toggle('active', i === idx));
+    tabs.forEach((tab, i) => {
+      const isSelected = i === idx;
+      tab.classList.toggle('active', isSelected);
+      tab.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+    });
+
+    const stage = this.mountPoint.querySelector('#outfitMatrixStage');
+    if (stage) {
+      stage.setAttribute('aria-labelledby', `wardrobe-tab-${idx}`);
+    }
+
+    // Announce to screen readers
+    const announcer = this.mountPoint.querySelector('#wardrobeOutfitAnnouncer');
+    if (announcer) {
+      announcer.textContent = `Showing outfit for ${outfit.day} ${outfit.time}: ${outfit.title}.`;
+    }
 
     // Update details
     const img = this.mountPoint.querySelector('#matrixHeroImg');

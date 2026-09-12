@@ -80,7 +80,7 @@ export class KillerIdeaSection {
                 ${this.pieces.map(piece => {
                   const isActive = activeOutfit.pieces.includes(piece.id);
                   return `
-                    <div class="inventory-piece-card ${isActive ? 'active-in-outfit' : ''}" data-piece-id="${piece.id}">
+                    <div class="inventory-piece-card ${isActive ? 'active-in-outfit' : ''}" data-piece-id="${piece.id}" role="button" tabindex="0" aria-pressed="${isActive ? 'true' : 'false'}" aria-label="Garment: ${piece.name}. Select to filter outfits.">
                       <img src="${piece.image}" alt="${piece.name}" class="piece-thumb" loading="lazy" />
                       <div class="piece-info">
                         <span class="piece-title">${piece.name}</span>
@@ -97,17 +97,26 @@ export class KillerIdeaSection {
             <!-- Right: Active Combinatorial Outfit Canvas -->
             <div class="outfit-display-column">
               
+              <!-- Screen Reader Live Announcer -->
+              <div class="sr-only" aria-live="polite" id="outfitLiveAnnouncer"></div>
+
               <!-- Outfit Tabs -->
-              <div class="outfit-selector-tabs" id="outfitTabs">
+              <div class="outfit-selector-tabs" id="outfitTabs" role="tablist" aria-label="Daily outfit looks">
                 ${this.outfits.map((outfit, idx) => `
-                  <button class="outfit-tab-btn ${idx === this.activeOutfitIndex ? 'active' : ''}" data-outfit-idx="${idx}">
+                  <button class="outfit-tab-btn ${idx === this.activeOutfitIndex ? 'active' : ''}" 
+                    data-outfit-idx="${idx}" 
+                    role="tab" 
+                    id="tab-outfit-${idx}" 
+                    aria-controls="outfitShowcase" 
+                    aria-selected="${idx === this.activeOutfitIndex ? 'true' : 'false'}" 
+                    tabindex="${idx === this.activeOutfitIndex ? '0' : '-1'}">
                     ${outfit.day.split('·')[0].trim()}
                   </button>
                 `).join('')}
               </div>
 
               <!-- Active Outfit Canvas Details -->
-              <div class="active-outfit-showcase" id="outfitShowcase">
+              <div class="active-outfit-showcase" id="outfitShowcase" role="tabpanel" aria-labelledby="tab-outfit-${this.activeOutfitIndex}" tabindex="0">
                 <div class="outfit-hero-visual">
                   <img 
                     src="${activeOutfit.image}" 
@@ -187,17 +196,49 @@ export class KillerIdeaSection {
         const idx = parseInt(btn.getAttribute('data-outfit-idx'), 10);
         this.switchOutfit(idx);
       });
+
+      // Keyboard arrow navigation on tabs
+      tabsContainer.addEventListener('keydown', (e) => {
+        const tabs = Array.from(tabsContainer.querySelectorAll('.outfit-tab-btn'));
+        const currentIdx = tabs.findIndex(t => t === document.activeElement);
+        if (currentIdx === -1) return;
+
+        let targetIdx = -1;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          targetIdx = (currentIdx + 1) % tabs.length;
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          targetIdx = (currentIdx - 1 + tabs.length) % tabs.length;
+        } else if (e.key === 'Home') {
+          targetIdx = 0;
+        } else if (e.key === 'End') {
+          targetIdx = tabs.length - 1;
+        }
+
+        if (targetIdx !== -1) {
+          e.preventDefault();
+          tabs[targetIdx].focus();
+          this.switchOutfit(targetIdx);
+        }
+      });
     }
 
-    // Piece cards click to toggle / inspect
+    // Piece cards click and keyboard activation to toggle / inspect
     const pieceCards = this.mountPoint.querySelectorAll('.inventory-piece-card');
     pieceCards.forEach(card => {
-      card.addEventListener('click', () => {
+      const activatePiece = () => {
         const pieceId = card.getAttribute('data-piece-id');
         // Find the first outfit featuring this piece
         const targetOutfitIdx = this.outfits.findIndex(o => o.pieces.includes(pieceId));
         if (targetOutfitIdx !== -1) {
           this.switchOutfit(targetOutfitIdx);
+        }
+      };
+
+      card.addEventListener('click', activatePiece);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activatePiece();
         }
       });
     });
@@ -219,8 +260,17 @@ export class KillerIdeaSection {
     // Update Tabs
     const tabs = this.mountPoint.querySelectorAll('.outfit-tab-btn');
     tabs.forEach((tab, i) => {
-      tab.classList.toggle('active', i === index);
+      const isSel = i === index;
+      tab.classList.toggle('active', isSel);
+      tab.setAttribute('aria-selected', isSel ? 'true' : 'false');
+      tab.setAttribute('tabindex', isSel ? '0' : '-1');
     });
+
+    // Update Right Canvas Showcase aria-labelledby
+    const showcase = this.mountPoint.querySelector('#outfitShowcase');
+    if (showcase) {
+      showcase.setAttribute('aria-labelledby', `tab-outfit-${index}`);
+    }
 
     // Update Active Pieces Highlight on Left
     const pieceCards = this.mountPoint.querySelectorAll('.inventory-piece-card');
@@ -229,12 +279,19 @@ export class KillerIdeaSection {
       const pieceId = card.getAttribute('data-piece-id');
       const isActive = activeOutfit.pieces.includes(pieceId);
       card.classList.toggle('active-in-outfit', isActive);
+      card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
       if (isActive) activeCount++;
     });
 
     // Update Counter
     const counter = this.mountPoint.querySelector('#activePieceCounter');
     if (counter) counter.textContent = `${activeCount} ACTIVE`;
+
+    // Announce to Screen Readers
+    const announcer = this.mountPoint.querySelector('#outfitLiveAnnouncer');
+    if (announcer) {
+      announcer.textContent = `Selected ${activeOutfit.day}: ${activeOutfit.title}. ${activeCount} foundational garments active.`;
+    }
 
     // Update Right Canvas Showcase
     const heroImg = this.mountPoint.querySelector('#activeOutfitHeroImg');
@@ -248,6 +305,7 @@ export class KillerIdeaSection {
       heroImg.classList.add('is-transforming');
       setTimeout(() => {
         heroImg.src = activeOutfit.image;
+        heroImg.alt = activeOutfit.title;
         heroImg.classList.remove('is-transforming');
       }, 140);
     }

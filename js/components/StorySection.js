@@ -101,21 +101,22 @@ export class StorySection {
             <div class="story-ambient-glow" id="storyAmbientGlow"></div>
 
             <!-- Subtle Progress Indicator Track -->
-            <div class="story-progress-indicator" id="storyProgressIndicator">
+            <div class="story-progress-indicator" id="storyProgressIndicator" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="8" aria-label="Pipeline Progress">
               <div class="story-progress-meta">
                 <span class="story-progress-tag">PIPELINE STAGE</span>
-                <span class="story-progress-counter" id="storyProgressCounter">01 / 08</span>
+                <span class="story-progress-counter" id="storyProgressCounter" role="status" aria-live="polite">01 / 08</span>
               </div>
               <div class="story-progress-trackbar">
                 <div class="story-progress-fill" id="storyProgressFill"></div>
               </div>
-              <div class="story-progress-steps" id="storyProgressDots">
+              <div class="story-progress-steps" id="storyProgressDots" role="group" aria-label="Pipeline Stage Selectors">
                 ${this.steps.map((s, idx) => `
                   <button 
                     class="story-nav-dot ${idx === 0 ? 'is-active' : ''}" 
                     data-step="${idx}" 
                     title="Jump to Stage ${s.num}: ${s.title}"
                     aria-label="Stage ${s.num}: ${s.title}"
+                    aria-current="${idx === 0 ? 'step' : 'false'}"
                   ></button>
                 `).join('')}
               </div>
@@ -289,6 +290,10 @@ export class StorySection {
       if (progressCounter) {
         progressCounter.textContent = `${currentStepNum} / 08`;
       }
+      const progressIndicator = this.mountPoint.querySelector('#storyProgressIndicator');
+      if (progressIndicator) {
+        progressIndicator.setAttribute('aria-valuenow', (activeStepIndex + 1).toString());
+      }
       if (ghostNum) {
         ghostNum.textContent = currentStepNum;
       }
@@ -298,7 +303,9 @@ export class StorySection {
 
       // Update Nav Dots
       dots.forEach((dot, idx) => {
-        dot.classList.toggle('is-active', idx === activeStepIndex);
+        const isAct = idx === activeStepIndex;
+        dot.classList.toggle('is-active', isAct);
+        dot.setAttribute('aria-current', isAct ? 'step' : 'false');
       });
 
       // Update Ambient Glow Tone

@@ -227,6 +227,7 @@ export class ExperienceModules {
             <div class="modal-notify-box">
               <span class="caps-label" style="font-size: 0.65rem;">BE THE FIRST TO PACK:</span>
               <form class="modal-notify-form" id="packNotifyForm">
+                <label for="packEmailInput" class="visually-hidden">Email address for Cycle 02 briefing</label>
                 <input 
                   type="email" 
                   class="modal-input" 
@@ -254,12 +255,35 @@ export class ExperienceModules {
     const modalCloseBtn = this.mountPoint.querySelector('#packModalCloseBtn');
     const notifyForm = this.mountPoint.querySelector('#packNotifyForm');
     const emailInput = this.mountPoint.querySelector('#packEmailInput');
+    let lastFocused = null;
+    let modalKeyHandler = null;
 
     const openModal = () => {
       if (modalBackdrop) {
+        lastFocused = document.activeElement;
         modalBackdrop.classList.add('is-open');
         document.body.style.overflow = 'hidden';
         if (emailInput) emailInput.focus();
+
+        modalKeyHandler = (e) => {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeModal();
+          } else if (e.key === 'Tab') {
+            const focusables = modalBackdrop.querySelectorAll('button:not([disabled]), input:not([disabled]), [tabindex="0"]');
+            if (!focusables.length) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        };
+        window.addEventListener('keydown', modalKeyHandler);
       }
     };
 
@@ -267,6 +291,15 @@ export class ExperienceModules {
       if (modalBackdrop) {
         modalBackdrop.classList.remove('is-open');
         document.body.style.overflow = '';
+        if (modalKeyHandler) {
+          window.removeEventListener('keydown', modalKeyHandler);
+          modalKeyHandler = null;
+        }
+        if (lastFocused && typeof lastFocused.focus === 'function') {
+          lastFocused.focus();
+        } else if (packCard) {
+          packCard.focus();
+        }
       }
     };
 
@@ -295,13 +328,6 @@ export class ExperienceModules {
         }
       });
     }
-
-    // Keyboard ESC listener
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modalBackdrop && modalBackdrop.classList.contains('is-open')) {
-        closeModal();
-      }
-    });
 
     // Notify Form Submission
     if (notifyForm) {

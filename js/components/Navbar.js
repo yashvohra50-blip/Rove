@@ -38,7 +38,7 @@ export class Navbar {
           </a>
 
           <!-- Desktop Navigation -->
-          <nav class="nav-links" id="desktopNavLinks">
+          <nav class="nav-links" id="desktopNavLinks" aria-label="Main Navigation">
             <a href="#/wardrobe" class="nav-link" data-route="#/wardrobe" id="navLinkWardrobe">WARDROBE</a>
             <a href="#/clothing" class="nav-link" data-route="#/clothing" id="navLinkClothing">CLOTHING</a>
             <a href="#/footwear" class="nav-link" data-route="#/footwear" id="navLinkFootwear">FOOTWEAR</a>
@@ -51,10 +51,10 @@ export class Navbar {
 
           <!-- Action & Mobile Toggle -->
           <div class="nav-actions">
-            <button class="btn btn-primary btn-sm" id="navBuildTripBtn">
+            <button class="btn btn-primary btn-sm" id="navBuildTripBtn" aria-haspopup="dialog">
               BUILD MY TRIP
             </button>
-            <button class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle Menu" aria-expanded="false">
+            <button class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobileMenuDrawer">
               <span></span>
               <span></span>
             </button>
@@ -63,7 +63,7 @@ export class Navbar {
       </header>
 
       <!-- Mobile Full-screen Overlay -->
-      <div class="mobile-menu" id="mobileMenuDrawer">
+      <div class="mobile-menu" id="mobileMenuDrawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu" aria-hidden="true">
         <div class="mobile-links">
           <a href="#/" class="mobile-link" data-route="#/">HOME</a>
           <a href="#/wardrobe" class="mobile-link" data-route="#/wardrobe">WARDROBE</a>
@@ -73,7 +73,7 @@ export class Navbar {
           <a href="#footerRoadmap" class="mobile-link" id="mobileAboutLink">ABOUT ROVE</a>
         </div>
         <div class="mobile-menu-footer">
-          <button class="btn btn-primary btn-lg" id="mobileBuildTripBtn" style="width: 100%;">
+          <button class="btn btn-primary btn-lg" id="mobileBuildTripBtn" style="width: 100%;" aria-haspopup="dialog">
             BUILD MY TRIP
           </button>
           <div class="caps-label" style="text-align: center; margin-top: 0.5rem; color: var(--text-tertiary);">
@@ -150,15 +150,50 @@ export class Navbar {
 
     if (toggle && drawer) {
       if (open) {
+        this.lastFocused = document.activeElement;
         toggle.classList.add('active');
         toggle.setAttribute('aria-expanded', 'true');
         drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+
+        const focusables = drawer.querySelectorAll('a[href], button:not([disabled])');
+        if (focusables.length) focusables[0].focus();
+
+        this.drawerKeyHandler = (e) => {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            this.toggleMobileMenu(false);
+          } else if (e.key === 'Tab') {
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        };
+        window.addEventListener('keydown', this.drawerKeyHandler);
       } else {
         toggle.classList.remove('active');
         toggle.setAttribute('aria-expanded', 'false');
         drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+
+        if (this.drawerKeyHandler) {
+          window.removeEventListener('keydown', this.drawerKeyHandler);
+          this.drawerKeyHandler = null;
+        }
+
+        if (this.lastFocused && typeof this.lastFocused.focus === 'function') {
+          this.lastFocused.focus();
+        } else {
+          toggle.focus();
+        }
       }
     }
   }

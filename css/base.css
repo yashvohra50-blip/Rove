@@ -230,25 +230,72 @@ ul, ol {
   margin: 0;
 }
 
-/* Visually Hidden for accessibility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+/* Accessible Skip Link */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1.5rem;
+  background: var(--bg-secondary);
+  color: var(--accent-primary);
+  padding: 0.85rem 1.5rem;
+  z-index: 10001;
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+  transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Respect Reduced Motion */
+.skip-link:focus {
+  top: 1.25rem;
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* Visually Hidden for screen reader accessibility */
+.sr-only,
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border-width: 0 !important;
+}
+
+/* Respect Reduced Motion: Replace elaborate motion with simple fades/transitions */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  html {
     scroll-behavior: auto !important;
   }
+
+  *, *::before, *::after {
+    /* Stop continuous or elaborate keyframe animations */
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    /* Disallow aggressive 3D and rotational displacement */
+    transform: none !important;
+  }
+
+  /* Replace elaborate motion with simple, gentle opacity and color transitions */
+  a, button, input, select, textarea,
+  .nav-link, .btn, .chip, .option-box, .chapter-card,
+  .outfit-tab-btn, .outfit-timeline-pill, .page-view-container,
+  .toast, .builder-modal, .reveal-on-scroll, .story-stage-item {
+    transition: opacity 0.2s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+  }
+
+  /* Reveal items immediately visible with standard opacity */
+  .reveal-on-scroll {
+    opacity: 1 !important;
+  }
 }
+
