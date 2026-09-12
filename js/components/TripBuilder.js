@@ -164,7 +164,7 @@ export class TripBuilder {
             <div class="step-header">
               <span class="step-label">SUMMARY</span>
               <h2 class="step-question" id="stepQuestion6">YOUR TRIP IS READY.</h2>
-              <p class="step-hint">Review your trip parameters before ROVE synthesizes your capsule wardrobe.</p>
+              <p class="step-hint">Review your trip parameters and travel intelligence before ROVE synthesizes your capsule wardrobe.</p>
             </div>
 
             <div class="trip-ready-brief">
@@ -195,8 +195,38 @@ export class TripBuilder {
                 </div>
               </div>
 
+              <!-- REAL TRIP INTELLIGENCE BRIEF -->
+              <div class="ready-intelligence-box" id="readyIntelligenceBox" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                  <span class="caps-label-accent" style="font-size: 0.7rem; letter-spacing: 0.1em;">CLIMATE & FABRIC WEIGHT INTELLIGENCE</span>
+                  <span class="badge badge-accent" id="readyGsmBadge" style="font-size: 0.65rem;">160–220 GSM</span>
+                </div>
+                <p id="readyClimateDesc" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem; line-height: 1.5;">
+                  Analyzing meteorological parameters...
+                </p>
+
+                <!-- Cultural Dress Requirements & Terrain -->
+                <div style="margin-top: 1rem;">
+                  <span class="caps-label" style="font-size: 0.65rem; color: var(--text-tertiary); display: block; margin-bottom: 0.5rem;">CULTURAL DRESS REQUIREMENTS & PROTOCOLS</span>
+                  <div id="readyAdvisoriesList" style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <!-- Injected dynamically -->
+                  </div>
+                </div>
+
+                <!-- Personal Wardrobe Integration Indicator -->
+                <div id="readyWardrobeMatch" style="margin-top: 1rem; padding: 0.75rem; background: rgba(201, 168, 76, 0.08); border-left: 2px solid var(--accent-primary); border-radius: 2px;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: var(--accent-primary);">✓</span>
+                    <span class="caps-label-accent" id="readyWardrobeMatchText" style="font-size: 0.7rem;">PERSONAL WARDROBE INTEGRATION ACTIVE</span>
+                  </div>
+                  <p id="readyWardrobeMatchSub" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; margin-bottom: 0;">
+                    3 compatible pieces from your personal archive will be incorporated into this capsule.
+                  </p>
+                </div>
+              </div>
+
               <div style="border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <span class="caps-label" style="color: var(--text-secondary);">ESTIMATED CAPSULE: 6 PIECES · 8 OUTFITS</span>
+                <span class="caps-label" id="readyCapsuleEst" style="color: var(--text-secondary);">ESTIMATED CAPSULE: 6 PIECES · 8 OUTFITS</span>
                 <button class="btn btn-primary btn-lg" id="builderSubmitBtn">
                   BUILD MY WARDROBE →
                 </button>
@@ -530,6 +560,13 @@ export class TripBuilder {
     const readyActs = this.mountPoint.querySelector('#readyActivities');
     const readyStyle = this.mountPoint.querySelector('#readyStyle');
     const readyLuggage = this.mountPoint.querySelector('#readyLuggage');
+    const readyGsmBadge = this.mountPoint.querySelector('#readyGsmBadge');
+    const readyClimateDesc = this.mountPoint.querySelector('#readyClimateDesc');
+    const readyAdvisoriesList = this.mountPoint.querySelector('#readyAdvisoriesList');
+    const readyWardrobeMatch = this.mountPoint.querySelector('#readyWardrobeMatch');
+    const readyWardrobeMatchText = this.mountPoint.querySelector('#readyWardrobeMatchText');
+    const readyWardrobeMatchSub = this.mountPoint.querySelector('#readyWardrobeMatchSub');
+    const readyCapsuleEst = this.mountPoint.querySelector('#readyCapsuleEst');
 
     if (readyDest) readyDest.textContent = currentTrip.destination.toUpperCase();
     if (readyTemp) {
@@ -543,6 +580,43 @@ export class TripBuilder {
       const lObj = LUGGAGE_OPTIONS.find(l => l.id === currentTrip.luggage);
       readyLuggage.textContent = lObj ? lObj.label : 'CARRY-ON';
     }
+
+    // Populate Real Trip Intelligence
+    const intel = store.getTripIntelligence();
+    if (intel) {
+      if (readyGsmBadge) {
+        readyGsmBadge.textContent = `${intel.climate.gsmRange} · CLO ${intel.climate.cloRating}`;
+      }
+      if (readyClimateDesc) {
+        readyClimateDesc.textContent = `${intel.climate.summary} ${intel.climate.gsmDescription}. Rain Risk: ${intel.climate.rainRisk}.`;
+      }
+      if (readyAdvisoriesList) {
+        readyAdvisoriesList.innerHTML = intel.advisories.map(adv => `
+          <div style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.8rem; color: var(--text-secondary);">
+            <span style="color: var(--accent-primary); line-height: 1.4;">◆</span>
+            <span>${adv}</span>
+          </div>
+        `).join('');
+      }
+      if (readyWardrobeMatch && readyWardrobeMatchText && readyWardrobeMatchSub) {
+        if (intel.compatibleUserCount > 0) {
+          readyWardrobeMatch.style.display = 'block';
+          readyWardrobeMatchText.textContent = `PERSONAL WARDROBE INTEGRATION ACTIVE (${intel.compatibleUserCount} MATCHES)`;
+          readyWardrobeMatchSub.textContent = `${intel.compatibleUserCount} compatible piece${intel.compatibleUserCount > 1 ? 's' : ''} from your personal archive will be woven into this capsule.`;
+        } else if (intel.totalUserGarments > 0) {
+          readyWardrobeMatch.style.display = 'block';
+          readyWardrobeMatchText.textContent = 'ROVE CURATED COMPLEMENTS';
+          readyWardrobeMatchSub.textContent = `Your ${intel.totalUserGarments} personal archive items target different climate profiles. ROVE master catalog pieces will be calibrated for ${intel.destination.city}.`;
+        } else {
+          readyWardrobeMatch.style.display = 'block';
+          readyWardrobeMatchText.textContent = 'ROVE ARCHETYPE CURATION';
+          readyWardrobeMatchSub.textContent = `Curating 100% bespoke pieces from ROVE's ${intel.destination.city} Master Catalog.`;
+        }
+      }
+      if (readyCapsuleEst) {
+        readyCapsuleEst.textContent = `ESTIMATED CAPSULE: ${intel.rotation.totalPieces} PIECES · ${intel.rotation.totalOutfits} OUTFITS (${intel.rotation.estVolumeLiters}L)`;
+      }
+    }
   }
 
   showCurationOverlay(active) {
@@ -552,17 +626,20 @@ export class TripBuilder {
 
     if (active) {
       const phrase = this.mountPoint.querySelector('#curationPhrase');
+      const { currentTrip } = store.getState();
       const phrases = [
-        '“Analyzing destination climate and walking demands…”',
-        '“Filtering 6 foundational garments for maximum compatibility…”',
-        '“Synthesizing day and evening outfit combinations…”',
-        '“Finalizing single-bag volumetric limits…”'
+        `“Analyzing ${currentTrip.destination} meteorological curves & walking demands…”`,
+        '“Scanning personal wardrobe archive for climate-compatible foundation pieces…”',
+        '“Filtering master catalog garments for 100% modular compatibility…”',
+        '“Synthesizing daytime exploration & evening elevation combinations…”',
+        '“Validating single-bag volumetric limits & carry-on compliance…”'
       ];
       let pIdx = 0;
+      if (phrase) phrase.textContent = phrases[0];
       this.phraseInterval = setInterval(() => {
         pIdx = (pIdx + 1) % phrases.length;
         if (phrase) phrase.textContent = phrases[pIdx];
-      }, 400);
+      }, 350);
     } else {
       if (this.phraseInterval) clearInterval(this.phraseInterval);
     }

@@ -30,6 +30,15 @@ export class WardrobeResult {
     const { currentTrip, wardrobe } = store.getState();
     const activeOutfit = wardrobe.outfits[this.activeOutfitIndex] || wardrobe.outfits[0];
     const destName = currentTrip.destination.toUpperCase();
+    const destMeta = currentTrip.destinationMeta;
+    const stats = wardrobe.stats || {
+      totalOutfits: wardrobe.outfits.length,
+      totalPieces: wardrobe.pieces.length,
+      footwearCount: wardrobe.pieces.filter(p => p.category === 'Footwear').length || 2,
+      cabinBags: 1,
+      totalWeightGrams: 1890,
+      luggageCompliance: '2.8L / 40L Cabin Capacity'
+    };
 
     this.mountPoint.innerHTML = `
       <section class="wardrobe-view" id="wardrobeView">
@@ -51,24 +60,71 @@ export class WardrobeResult {
                 YOU DON'T NEED MORE.
               </div>
               <p class="wardrobe-context-sub">
-                Engineered specifically for ${destName}'s climate (${currentTrip.destinationMeta ? currentTrip.destinationMeta.avgTemp : '32°C'}), 
+                Engineered specifically for ${destName}'s climate (${destMeta ? destMeta.avgTemp : '22°C'}), 
                 your ${currentTrip.style} aesthetic, and 15,000+ daily steps across ${currentTrip.activities.join(', ')}.
               </p>
+            </div>
+          </div>
+
+          <!-- Trip Intelligence & Cultural Requirements Banner -->
+          <div class="wardrobe-intelligence-banner reveal-on-scroll" style="margin: 2rem 0; padding: 1.5rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.85rem;">
+              <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                <span class="caps-label-accent" style="font-size: 0.75rem; letter-spacing: 0.12em;">CALIBRATED TRIP INTELLIGENCE</span>
+                <span class="badge badge-accent">${destMeta?.avgTemp || '22°C'} · ${destMeta?.climate || 'Temperate'}</span>
+                <span class="badge" style="font-size: 0.65rem;">${destMeta?.walkingIntensity || '10 KM / Day'}</span>
+              </div>
+              <div class="caps-label" style="font-size: 0.7rem; color: var(--accent-primary);">
+                ${wardrobe.userPiecesUsedCount > 0 
+                  ? `✓ ${wardrobe.userPiecesUsedCount} PERSONAL ARCHIVE PIECES INTEGRATED` 
+                  : 'ROVE MASTER ARCHETYPE CALIBRATION'}
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+              <div>
+                <span class="caps-label" style="font-size: 0.65rem; color: var(--text-tertiary); display: block; margin-bottom: 0.35rem;">METEOROLOGY & FABRIC WEIGHT</span>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                  ${wardrobe.climate?.summary || `${destName} climate analysis complete.`} 
+                  Target weight: <strong style="color: var(--text-primary);">${wardrobe.climate?.gsmRange || '160–220 GSM'}</strong>.
+                </p>
+              </div>
+
+              <div>
+                <span class="caps-label" style="font-size: 0.65rem; color: var(--text-tertiary); display: block; margin-bottom: 0.35rem;">CULTURAL DRESS REQUIREMENTS</span>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem;">
+                  ${(wardrobe.culturalAdvisories || destMeta?.culturalDressCodes || ['Standard international smart-casual decorum.']).map(adv => `
+                    <li style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.4;">
+                      <span style="color: var(--accent-primary); line-height: 1.4;">◆</span>
+                      <span>${adv}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+
+              <div>
+                <span class="caps-label" style="font-size: 0.65rem; color: var(--text-tertiary); display: block; margin-bottom: 0.35rem;">LUGGAGE & VOLUME CAPACITY</span>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                  Total Pack Weight: <strong style="color: var(--text-primary);">${stats.totalWeightGrams || 1890}g</strong> · Volume: <strong style="color: var(--text-primary);">${stats.luggageCompliance || '2.8L / 40L'}</strong>.
+                  <br />
+                  <span style="color: var(--accent-primary); font-size: 0.75rem;">100% Carry-On Approved · Zero Airport Baggage Queues</span>
+                </p>
+              </div>
             </div>
           </div>
 
           <!-- 4 Core Metrics Strip -->
           <div class="wardrobe-stat-strip reveal-on-scroll stagger-1">
             <div class="wardrobe-stat-col">
-              <span class="wardrobe-stat-num">7</span>
+              <span class="wardrobe-stat-num">${stats.totalOutfits || wardrobe.outfits.length}</span>
               <span class="wardrobe-stat-label">CURATED OUTFITS</span>
             </div>
             <div class="wardrobe-stat-col">
-              <span class="wardrobe-stat-num">6</span>
+              <span class="wardrobe-stat-num">${stats.totalPieces || wardrobe.pieces.length}</span>
               <span class="wardrobe-stat-label">CLOTHING PIECES</span>
             </div>
             <div class="wardrobe-stat-col">
-              <span class="wardrobe-stat-num">2</span>
+              <span class="wardrobe-stat-num">${stats.footwearCount || 2}</span>
               <span class="wardrobe-stat-label">FOOTWEAR OPTIONS</span>
             </div>
             <div class="wardrobe-stat-col">
@@ -158,7 +214,7 @@ export class WardrobeResult {
               <div class="section-head-flex">
                 <div>
                   <span class="caps-label-accent">THE ANATOMY OF PACKING LESS</span>
-                  <h2 class="section-headline" style="font-size: 1.75rem;">THE 6 MASTER PIECES</h2>
+                  <h2 class="section-headline" style="font-size: 1.75rem;">THE ${wardrobe.pieces.length} MASTER PIECES</h2>
                 </div>
                 <div class="badge badge-accent">
                   100% COMPATIBLE CAPSULE
@@ -171,6 +227,11 @@ export class WardrobeResult {
                     <div class="garment-image-box">
                       <img src="${piece.image}" alt="${piece.name}" class="garment-img" loading="lazy" />
                       <span class="garment-tag-pill">${piece.role}</span>
+                      ${piece.isFromUserWardrobe ? `
+                        <span class="badge badge-accent" style="position: absolute; top: 0.75rem; left: 0.75rem; font-size: 0.6rem; padding: 3px 8px; letter-spacing: 0.08em; background: rgba(18, 18, 18, 0.88); backdrop-filter: blur(8px); border: 1px solid var(--accent-primary); color: var(--accent-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                          FROM YOUR CLOSET
+                        </span>
+                      ` : ''}
                     </div>
                     <div class="garment-body">
                       <h4 class="garment-name">${piece.name}</h4>
@@ -251,10 +312,10 @@ export class WardrobeResult {
     const checklistBtn = this.mountPoint.querySelector('#downloadChecklistBtn');
     if (checklistBtn) {
       checklistBtn.addEventListener('click', () => {
-        const { currentTrip } = store.getState();
+        const { currentTrip, wardrobe } = store.getState();
         store.showToast(
           'PACKING LIST GENERATED',
-          `Your 6-piece carry-on allocation for ${currentTrip.destination.toUpperCase()} has been saved to your session.`
+          `Your ${wardrobe.pieces.length}-piece carry-on allocation for ${currentTrip.destination.toUpperCase()} has been saved to your session.`
         );
       });
     }

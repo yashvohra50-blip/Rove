@@ -5,6 +5,7 @@
 
 import { DESTINATIONS, JAIPUR_CAPSULE_PIECES, JAIPUR_OUTFITS } from './data/mockData.js';
 import { authService } from './services/authService.js';
+import { tripIntelligenceEngine } from './services/tripIntelligenceEngine.js';
 
 class Store {
   constructor() {
@@ -30,13 +31,30 @@ class Store {
     }
 
     const initialUser = authService.getActiveSession();
+    const userWardrobe = initialUser ? authService.getUserWardrobe(initialUser.id) : [];
+
+    const synthesizedInitial = tripIntelligenceEngine.synthesizeCapsule({
+      destination: initialTrip.destination,
+      duration: initialTrip.duration,
+      activities: initialTrip.activities,
+      style: initialTrip.style,
+      luggage: initialTrip.luggage,
+      userWardrobe
+    });
 
     this.state = {
-      currentTrip: initialTrip,
+      currentTrip: {
+        ...initialTrip,
+        destinationMeta: synthesizedInitial.destination
+      },
       wardrobe: {
-        pieces: [...JAIPUR_CAPSULE_PIECES],
-        outfits: [...JAIPUR_OUTFITS],
-        selectedOutfitIndex: 0
+        pieces: synthesizedInitial.pieces,
+        outfits: synthesizedInitial.outfits,
+        selectedOutfitIndex: 0,
+        culturalAdvisories: synthesizedInitial.culturalAdvisories,
+        climate: synthesizedInitial.climate,
+        stats: synthesizedInitial.stats,
+        userPiecesUsedCount: synthesizedInitial.userPiecesUsedCount
       },
       builder: {
         isOpen: false,
@@ -106,18 +124,8 @@ class Store {
 
   updateTripDestination(destName) {
     this.state.currentTrip.destination = destName;
-    const match = DESTINATIONS.find(d => d.city.toLowerCase() === destName.toLowerCase() || d.id === destName.toLowerCase());
-    this.state.currentTrip.destinationMeta = match || {
-      id: 'custom',
-      city: destName,
-      country: 'Global',
-      tagline: 'Custom Destination',
-      avgTemp: '28°C',
-      climate: 'Moderate',
-      walkingIntensity: '8 KM / Day',
-      recommendedFabrics: ['Lightweight Cotton', 'Linen', 'Merino Wool'],
-      image: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1600&q=85'
-    };
+    const match = tripIntelligenceEngine.resolveDestination(destName);
+    this.state.currentTrip.destinationMeta = match;
     this.saveTripState();
     this.notify('TRIP_UPDATED', this.state.currentTrip);
   }
@@ -152,10 +160,56 @@ class Store {
     this.notify('TRIP_UPDATED', this.state.currentTrip);
   }
 
+  getTripIntelligence() {
+    const destMeta = tripIntelligenceEngine.resolveDestination(this.state.currentTrip.destination);
+    const climate = tripIntelligenceEngine.analyzeClimate(destMeta);
+    const activities = tripIntelligenceEngine.analyzeActivities(this.state.currentTrip.activities);
+    const rotation = tripIntelligenceEngine.calculateDurationRotation(this.state.currentTrip.duration, this.state.currentTrip.luggage);
+    const advisories = tripIntelligenceEngine.getCulturalAdvisories(destMeta, this.state.currentTrip.activities);
+    const userWardrobe = this.getUserWardrobe();
+    const compatibleUserCount = (userWardrobe || []).filter(item => {
+      if (!item) return false;
+      const itemClimate = item.climate ? item.climate.toLowerCase() : 'all';
+      return itemClimate === 'all' || itemClimate === climate.climateBracket;
+    }).length;
+
+    return {
+      destination: destMeta,
+      climate,
+      activities,
+      rotation,
+      advisories,
+      compatibleUserCount,
+      totalUserGarments: (userWardrobe || []).length
+    };
+  }
+
   // Curation Process
   startCuration(onComplete) {
     this.state.builder.isCurating = true;
     this.notify('CURATION_STARTED', null);
+
+    // Dynamic algorithmic wardrobe synthesis
+    const synthesized = tripIntelligenceEngine.synthesizeCapsule({
+      destination: this.state.currentTrip.destination,
+      duration: this.state.currentTrip.duration,
+      activities: this.state.currentTrip.activities,
+      style: this.state.currentTrip.style,
+      luggage: this.state.currentTrip.luggage,
+      userWardrobe: this.getUserWardrobe()
+    });
+
+    this.state.currentTrip.destinationMeta = synthesized.destination;
+    this.state.wardrobe = {
+      pieces: synthesized.pieces,
+      outfits: synthesized.outfits,
+      selectedOutfitIndex: 0,
+      culturalAdvisories: synthesized.culturalAdvisories,
+      climate: synthesized.climate,
+      stats: synthesized.stats,
+      userPiecesUsedCount: synthesized.userPiecesUsedCount
+    };
+    this.saveTripState();
 
     // Simulate cinematic AI curation sequence
     setTimeout(() => {

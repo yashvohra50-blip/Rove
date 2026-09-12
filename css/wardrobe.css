@@ -446,3 +446,25 @@
   }
 }
 
+/* ==========================================================================
+   PHASE 18 — REAL TRIP INTELLIGENCE & CULTURAL ADVISORIES
+   ========================================================================== */
+.wardrobe-intelligence-banner {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(201, 168, 76, 0.03) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--duration-normal) var(--ease-out);
+}
+
+.wardrobe-intelligence-banner:hover {
+  border-color: rgba(201, 168, 76, 0.3);
+}
+
+.ready-intelligence-box {
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.ready-intelligence-box:hover {
+  border-color: rgba(201, 168, 76, 0.25);
+}
+
