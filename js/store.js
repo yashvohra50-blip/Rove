@@ -250,6 +250,67 @@ class Store {
     this.showToast('JOURNEY ARCHIVED', `${this.state.currentTrip.destination} capsule saved to your ROVE account.`);
     return true;
   }
+
+  // ==========================================================================
+  // User Wardrobe Collection Mutations (Phase 17)
+  // ==========================================================================
+
+  getUserWardrobe() {
+    if (!this.state.auth.isAuthenticated || !this.state.auth.user) {
+      return [];
+    }
+    return authService.getUserWardrobe(this.state.auth.user.id);
+  }
+
+  addUserWardrobeItem(item) {
+    if (!this.state.auth.isAuthenticated || !this.state.auth.user) {
+      this.openAuthModal('login', '#/my-wardrobe');
+      return null;
+    }
+    const res = authService.addWardrobeItem(this.state.auth.user.id, item);
+    this.setAuthUser(res.user);
+    this.notify('WARDROBE_COLLECTION_UPDATED', res.user.wardrobe);
+    this.showToast('GARMENT ARCHIVED', `"${res.item.name}" added to your personal wardrobe.`);
+    return res.item;
+  }
+
+  updateUserWardrobeItem(itemId, updates) {
+    if (!this.state.auth.isAuthenticated || !this.state.auth.user) return null;
+    const res = authService.updateWardrobeItem(this.state.auth.user.id, itemId, updates);
+    this.setAuthUser(res.user);
+    this.notify('WARDROBE_COLLECTION_UPDATED', res.user.wardrobe);
+    this.showToast('GARMENT UPDATED', `"${res.item.name}" specifications updated.`);
+    return res.item;
+  }
+
+  deleteUserWardrobeItem(itemId) {
+    if (!this.state.auth.isAuthenticated || !this.state.auth.user) return false;
+    const updatedUser = authService.deleteWardrobeItem(this.state.auth.user.id, itemId);
+    this.setAuthUser(updatedUser);
+    this.notify('WARDROBE_COLLECTION_UPDATED', updatedUser.wardrobe);
+    this.showToast('GARMENT REMOVED', 'Item removed from your personal wardrobe.');
+    return true;
+  }
+
+  togglePinWardrobeItem(itemId) {
+    if (!this.state.auth.isAuthenticated || !this.state.auth.user) return false;
+    const updatedUser = authService.togglePinWardrobeItem(this.state.auth.user.id, itemId);
+    this.setAuthUser(updatedUser);
+    this.notify('WARDROBE_COLLECTION_UPDATED', updatedUser.wardrobe);
+    return true;
+  }
+
+  importEssentialPack() {
+    if (!this.state.auth.isAuthenticated || !this.state.auth.user) {
+      this.openAuthModal('login', '#/my-wardrobe');
+      return false;
+    }
+    const updatedUser = authService.importEssentialPack(this.state.auth.user.id);
+    this.setAuthUser(updatedUser);
+    this.notify('WARDROBE_COLLECTION_UPDATED', updatedUser.wardrobe);
+    this.showToast('PACK IMPORTED', 'Essential travel pieces loaded into your wardrobe.');
+    return true;
+  }
 }
 
 export const store = new Store();

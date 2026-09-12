@@ -20,6 +20,8 @@ import { Footer } from './components/Footer.js';
 import { ToastModal } from './components/ToastModal.js';
 import { AuthModal } from './components/AuthModal.js';
 import { MyRoveView } from './components/MyRoveView.js';
+import { UserWardrobeView } from './components/UserWardrobeView.js';
+import { WardrobeItemModal } from './components/WardrobeItemModal.js';
 
 class App {
   constructor() {
@@ -32,6 +34,7 @@ class App {
     const builderMount = document.getElementById('builderMount');
     const toastMount = document.getElementById('toastMount');
     const authModalMount = document.getElementById('authModalMount');
+    const wardrobeModalMount = document.getElementById('wardrobeModalMount');
     const footerMount = document.getElementById('footerMount');
     const appView = document.getElementById('appView');
 
@@ -39,6 +42,7 @@ class App {
     if (builderMount) new TripBuilder(builderMount);
     if (toastMount) new ToastModal(toastMount);
     if (authModalMount) new AuthModal(authModalMount);
+    if (wardrobeModalMount) new WardrobeItemModal(wardrobeModalMount);
     if (footerMount) new Footer(footerMount);
 
     // 2. Define Route Handlers
@@ -81,6 +85,11 @@ class App {
         const myRoveWrapper = document.createElement('div');
         container.appendChild(myRoveWrapper);
         new MyRoveView(myRoveWrapper);
+      },
+      '#/my-wardrobe': (container) => {
+        const userWardrobeWrapper = document.createElement('div');
+        container.appendChild(userWardrobeWrapper);
+        new UserWardrobeView(userWardrobeWrapper);
       }
     };
 

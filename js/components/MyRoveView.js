@@ -50,6 +50,7 @@ export class MyRoveView {
 
     const currentTrip = store.getState().currentTrip;
     const savedTrips = user.savedTrips || [];
+    const userWardrobe = store.getUserWardrobe();
     const totalDays = savedTrips.reduce((acc, t) => acc + (t.duration || 0), currentTrip?.duration || 0);
 
     // Initials for avatar
@@ -157,7 +158,36 @@ export class MyRoveView {
             </div>
           </section>
 
-          <!-- 4. Saved Capsules Archive Library -->
+          <!-- 4. Personal Wardrobe Archive Section (Phase 17) -->
+          <section class="my-rove-section">
+            <div class="section-header-row">
+              <div class="section-heading-group">
+                <span class="section-tag">PERSONAL INVENTORY</span>
+                <h2 class="section-title">My Wardrobe Archive (${userWardrobe.length} Pieces)</h2>
+              </div>
+              <a href="#/my-wardrobe" class="btn-luxury-primary">
+                <span>Manage Wardrobe Archive</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1rem;">
+              ${userWardrobe.slice(0, 6).map(item => `
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 4px; overflow: hidden; text-align: center; transition: transform 0.2s ease;">
+                  <div style="height: 110px; overflow: hidden; background: #0a0a0c;">
+                    <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                  </div>
+                  <div style="padding: 0.5rem; font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    ${item.name}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </section>
+
+          <!-- 5. Saved Capsules Archive Library -->
           <section class="my-rove-section">
             <div class="section-header-row">
               <div class="section-heading-group">

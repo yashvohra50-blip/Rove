@@ -9,6 +9,121 @@ const STORAGE_SESSION_KEY = 'rove_active_session';
 const SESSION_DURATION_STANDARD = 24 * 60 * 60 * 1000; // 24 Hours
 const SESSION_DURATION_EXTENDED = 30 * 24 * 60 * 60 * 1000; // 30 Days (Remember Me)
 
+export const DEFAULT_JULIAN_WARDROBE = [
+  {
+    id: 'grm_jv_01',
+    name: 'Belgian Camp Collar Linen Shirt',
+    category: 'Tops & Shirts',
+    fabric: '100% Normandy Breathable Linen (160 GSM)',
+    weight: 185,
+    color: 'Sand / Ecru',
+    climate: 'Warm / Arid',
+    laundryTurnaround: '45 min fast air-dry',
+    versatility: 'Pairs with all tailored chinos and shorts',
+    image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=85',
+    isPinned: true,
+    dateAdded: 'Aug 2024'
+  },
+  {
+    id: 'grm_jv_02',
+    name: 'Fine-Gauge Merino Air Tee',
+    category: 'Tops & Shirts',
+    fabric: '17.5 Micron Ultra-fine New Zealand Merino (145 GSM)',
+    weight: 160,
+    color: 'Obsidian Black',
+    climate: 'All Climates',
+    laundryTurnaround: 'Odor-immune (wear 3x before wash)',
+    versatility: 'Base layer for flights or casual city walks',
+    image: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=800&q=85',
+    isPinned: true,
+    dateAdded: 'Aug 2024'
+  },
+  {
+    id: 'grm_jv_03',
+    name: 'Structured Oxford Popover',
+    category: 'Tops & Shirts',
+    fabric: 'Long-Staple Supima Cotton (190 GSM)',
+    weight: 220,
+    color: 'Chalk White',
+    climate: 'Temperate',
+    laundryTurnaround: 'Overnight hanger dry',
+    versatility: 'Elevated dinner or gallery visits',
+    image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=85',
+    isPinned: false,
+    dateAdded: 'Sep 2024'
+  },
+  {
+    id: 'grm_jv_04',
+    name: 'Pleated High-Twist Travel Chinos',
+    category: 'Bottoms & Trousers',
+    fabric: '70% Tencel Lyocell, 28% High-Twist Cotton, 2% Elastane',
+    weight: 320,
+    color: 'Muted Olive Stone',
+    climate: 'All Climates',
+    laundryTurnaround: 'Wrinkle recovery in humid bathroom',
+    versatility: 'Internal zipped passport pocket',
+    image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=800&q=85',
+    isPinned: true,
+    dateAdded: 'Jul 2024'
+  },
+  {
+    id: 'grm_jv_05',
+    name: 'Japanese Washed Selvedge Denim',
+    category: 'Bottoms & Trousers',
+    fabric: '12.5oz Kurabo Mills Lightweight Stretch Denim',
+    weight: 440,
+    color: 'Raw Indigo Rinse',
+    climate: 'Temperate',
+    laundryTurnaround: 'Spot clean only during transit',
+    versatility: 'High transit durability across flights and trains',
+    image: 'https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=800&q=85',
+    isPinned: false,
+    dateAdded: 'Jun 2024'
+  },
+  {
+    id: 'grm_jv_06',
+    name: 'Unconstructed Field Overshirt',
+    category: 'Outerwear & Jackets',
+    fabric: 'Washed Cotton Canvas with DWR Nano Shield (340 GSM)',
+    weight: 380,
+    color: 'Deep Graphite',
+    climate: 'All Climates',
+    laundryTurnaround: 'Brush clean',
+    versatility: 'Transit layer with 3 concealed passport compartments',
+    image: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=800&q=85',
+    isPinned: true,
+    dateAdded: 'Aug 2024'
+  },
+  {
+    id: 'grm_jv_07',
+    name: 'Minimalist Italian Nappa Court Sneaker',
+    category: 'Footwear',
+    fabric: 'Full-Grain Nappa Leather with Margom Rubber Sole',
+    weight: 410,
+    color: 'Chalk White / Charcoal',
+    climate: 'All Climates',
+    laundryTurnaround: 'Wipe down clean',
+    versatility: '18,000 daily steps comfort without visual bulk',
+    image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=85',
+    isPinned: true,
+    dateAdded: 'May 2024'
+  },
+  {
+    id: 'grm_jv_08',
+    name: 'Deconstructed Suede Belgian Loafer',
+    category: 'Footwear',
+    fabric: 'Water-Resistant Reverse Calfskin Suede, Flexible Blake Sole',
+    weight: 360,
+    color: 'Espresso Suede',
+    climate: 'Temperate',
+    laundryTurnaround: 'Cedar shoe tree rest',
+    versatility: 'Formal dinners, private clubs, relaxed evenings',
+    image: 'https://images.unsplash.com/photo-1533867617858-e7b97e060509?auto=format&fit=crop&w=800&q=85',
+    isPinned: false,
+    dateAdded: 'Aug 2024'
+  }
+];
+
 class AuthService {
   constructor() {
     this.initDatabase();
@@ -82,6 +197,7 @@ class AuthService {
           climateTolerance: 'High Heat / Humidity',
           excludedFabrics: ['Synthetics', 'Heavy Denim']
         },
+        wardrobe: [...DEFAULT_JULIAN_WARDROBE],
         savedTrips: [
           {
             id: 'trip_jaipur_5d',
@@ -169,6 +285,7 @@ class AuthService {
         climateTolerance: 'Moderate',
         excludedFabrics: []
       },
+      wardrobe: [],
       savedTrips: []
     };
 
@@ -443,6 +560,109 @@ class AuthService {
     user.savedTrips = (user.savedTrips || []).filter(t => t.id !== tripId);
     this.saveUsers(users);
 
+    return this.sanitizeUser(user);
+  }
+
+  // ==========================================================================
+  // 7. USER WARDROBE ARCHIVE MANAGEMENT (PHASE 17)
+  // ==========================================================================
+
+  getUserWardrobe(userId) {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (!user) return [];
+
+    // Ensure demo user has wardrobe seeded if empty
+    if ((!user.wardrobe || user.wardrobe.length === 0) && user.id === 'usr_julian_vance') {
+      user.wardrobe = [...DEFAULT_JULIAN_WARDROBE];
+      this.saveUsers(users);
+    }
+
+    return user.wardrobe || [];
+  }
+
+  addWardrobeItem(userId, item) {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (!user) throw new Error('User not found.');
+
+    if (!user.wardrobe) user.wardrobe = [];
+
+    const newItem = {
+      id: 'grm_' + this.generateRandomToken(8),
+      name: item.name.trim(),
+      category: item.category || 'Tops & Shirts',
+      fabric: item.fabric ? item.fabric.trim() : 'Natural Fiber Blend',
+      weight: item.weight ? Number(item.weight) : 200,
+      color: item.color ? item.color.trim() : 'Neutral',
+      climate: item.climate || 'All Climates',
+      laundryTurnaround: item.laundryTurnaround ? item.laundryTurnaround.trim() : 'Overnight air dry',
+      versatility: item.versatility ? item.versatility.trim() : 'Modular capsule base',
+      image: item.image || 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=85',
+      isPinned: !!item.isPinned,
+      dateAdded: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    };
+
+    user.wardrobe.unshift(newItem);
+    this.saveUsers(users);
+    return { user: this.sanitizeUser(user), item: newItem };
+  }
+
+  updateWardrobeItem(userId, itemId, updates) {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (!user) throw new Error('User not found.');
+
+    if (!user.wardrobe) user.wardrobe = [];
+    const index = user.wardrobe.findIndex(i => i.id === itemId);
+    if (index === -1) throw new Error('Garment not found.');
+
+    user.wardrobe[index] = {
+      ...user.wardrobe[index],
+      ...updates,
+      weight: updates.weight ? Number(updates.weight) : user.wardrobe[index].weight,
+      id: itemId
+    };
+
+    this.saveUsers(users);
+    return { user: this.sanitizeUser(user), item: user.wardrobe[index] };
+  }
+
+  deleteWardrobeItem(userId, itemId) {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (!user) throw new Error('User not found.');
+
+    user.wardrobe = (user.wardrobe || []).filter(i => i.id !== itemId);
+    this.saveUsers(users);
+    return this.sanitizeUser(user);
+  }
+
+  togglePinWardrobeItem(userId, itemId) {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (!user) throw new Error('User not found.');
+
+    const item = (user.wardrobe || []).find(i => i.id === itemId);
+    if (item) {
+      item.isPinned = !item.isPinned;
+      this.saveUsers(users);
+    }
+    return this.sanitizeUser(user);
+  }
+
+  importEssentialPack(userId) {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (!user) throw new Error('User not found.');
+
+    const existingIds = new Set((user.wardrobe || []).map(i => i.name));
+    const toAdd = DEFAULT_JULIAN_WARDROBE
+      .filter(i => !existingIds.has(i.name))
+      .map(i => ({ ...i, id: 'grm_' + this.generateRandomToken(8) }));
+
+    user.wardrobe = [...toAdd, ...(user.wardrobe || [])];
+    this.saveUsers(users);
     return this.sanitizeUser(user);
   }
 }

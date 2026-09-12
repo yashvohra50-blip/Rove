@@ -44,8 +44,8 @@ export class Router {
       return false;
     }) || '#/';
 
-    // Protected Route Guard (Phase 16: Authentication & Security)
-    const protectedRoutes = ['#/my-rove', '#/profile'];
+    // Protected Route Guard (Phase 16 & 17: Authentication & Wardrobe Archive)
+    const protectedRoutes = ['#/my-rove', '#/profile', '#/my-wardrobe'];
     if (protectedRoutes.includes(routeKey)) {
       if (!store.getState().auth.isAuthenticated) {
         store.showToast('MEMBER ACCESS REQUIRED', 'Please authenticate to access your ROVE Nomadic Passport.');

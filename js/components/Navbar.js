@@ -216,6 +216,9 @@ export class Navbar {
 
       if (navMount) {
         navMount.innerHTML = `
+          <a href="#/my-wardrobe" class="nav-auth-btn" id="navMyWardrobeBtn" title="Personal Wardrobe Archive" style="margin-right: 0.5rem;">
+            <span>MY WARDROBE</span>
+          </a>
           <a href="#/my-rove" class="nav-auth-btn" id="navMyRoveBtn" aria-label="Open My Rove Dashboard">
             <span class="nav-user-initials" aria-hidden="true">${initials}</span>
             <span>MY ROVE</span>
@@ -225,6 +228,9 @@ export class Navbar {
 
       if (mobileMount) {
         mobileMount.innerHTML = `
+          <a href="#/my-wardrobe" class="mobile-link" data-route="#/my-wardrobe" id="mobileMyWardrobeLink">
+            MY WARDROBE
+          </a>
           <a href="#/my-rove" class="mobile-link" data-route="#/my-rove" id="mobileMyRoveLink" style="color: var(--accent-primary);">
             MY ROVE (${user.name})
           </a>
