@@ -6,6 +6,7 @@
 import { DESTINATIONS, JAIPUR_CAPSULE_PIECES, JAIPUR_OUTFITS } from './data/mockData.js';
 import { authService } from './services/authService.js';
 import { tripIntelligenceEngine } from './services/tripIntelligenceEngine.js';
+import { outfitEngine } from './services/outfitEngine.js';
 
 class Store {
   constructor() {
@@ -42,6 +43,22 @@ class Store {
       userWardrobe
     });
 
+    const initialCombos = outfitEngine.generateAllCombinations(
+      synthesizedInitial.pieces,
+      synthesizedInitial.destination,
+      synthesizedInitial.climate
+    );
+    const initialOpt = outfitEngine.analyzeWardrobeOptimization(
+      synthesizedInitial.pieces,
+      initialCombos
+    );
+    const initialGaps = outfitEngine.detectMissingItems({
+      pieces: synthesizedInitial.pieces,
+      destination: synthesizedInitial.destination,
+      activities: initialTrip.activities,
+      climate: synthesizedInitial.climate
+    });
+
     this.state = {
       currentTrip: {
         ...initialTrip,
@@ -50,7 +67,12 @@ class Store {
       wardrobe: {
         pieces: synthesizedInitial.pieces,
         outfits: synthesizedInitial.outfits,
+        allCombinations: initialCombos,
+        optimization: initialOpt,
+        missingItems: initialGaps,
         selectedOutfitIndex: 0,
+        viewMode: 'itinerary', // 'itinerary' | 'combinations'
+        combinationsFilter: { occasion: 'all', anchorPieceId: null },
         culturalAdvisories: synthesizedInitial.culturalAdvisories,
         climate: synthesizedInitial.climate,
         stats: synthesizedInitial.stats,
@@ -199,11 +221,32 @@ class Store {
       userWardrobe: this.getUserWardrobe()
     });
 
+    const allCombos = outfitEngine.generateAllCombinations(
+      synthesized.pieces,
+      synthesized.destination,
+      synthesized.climate
+    );
+    const optimization = outfitEngine.analyzeWardrobeOptimization(
+      synthesized.pieces,
+      allCombos
+    );
+    const missingItems = outfitEngine.detectMissingItems({
+      pieces: synthesized.pieces,
+      destination: synthesized.destination,
+      activities: this.state.currentTrip.activities,
+      climate: synthesized.climate
+    });
+
     this.state.currentTrip.destinationMeta = synthesized.destination;
     this.state.wardrobe = {
       pieces: synthesized.pieces,
       outfits: synthesized.outfits,
+      allCombinations: allCombos,
+      optimization,
+      missingItems,
       selectedOutfitIndex: 0,
+      viewMode: 'itinerary',
+      combinationsFilter: { occasion: 'all', anchorPieceId: null },
       culturalAdvisories: synthesized.culturalAdvisories,
       climate: synthesized.climate,
       stats: synthesized.stats,
@@ -224,6 +267,92 @@ class Store {
   setSelectedOutfit(index) {
     this.state.wardrobe.selectedOutfitIndex = index;
     this.notify('OUTFIT_SELECTED', index);
+  }
+
+  setWardrobeViewMode(mode) {
+    this.state.wardrobe.viewMode = mode === 'combinations' ? 'combinations' : 'itinerary';
+    this.notify('WARDROBE_VIEW_MODE_CHANGED', this.state.wardrobe.viewMode);
+  }
+
+  setCombinationsFilter(filter = {}) {
+    this.state.wardrobe.combinationsFilter = {
+      ...this.state.wardrobe.combinationsFilter,
+      ...filter
+    };
+    this.notify('COMBINATIONS_FILTER_CHANGED', this.state.wardrobe.combinationsFilter);
+  }
+
+  addPieceToActiveCapsule(piece) {
+    if (!piece || !piece.name) return false;
+    
+    const exists = this.state.wardrobe.pieces.some(p => p.id === piece.id || p.name === piece.name);
+    if (exists) {
+      this.showToast('PIECE ALREADY ACTIVE', `"${piece.name}" is already part of your active capsule.`);
+      return false;
+    }
+
+    const updatedPieces = [...this.state.wardrobe.pieces, piece];
+    const destMeta = this.state.currentTrip.destinationMeta;
+    const climate = this.state.wardrobe.climate;
+
+    const allCombos = outfitEngine.generateAllCombinations(updatedPieces, destMeta, climate);
+    const optimization = outfitEngine.analyzeWardrobeOptimization(updatedPieces, allCombos);
+    const missingItems = outfitEngine.detectMissingItems({
+      pieces: updatedPieces,
+      destination: destMeta,
+      activities: this.state.currentTrip.activities,
+      climate
+    });
+
+    this.state.wardrobe.pieces = updatedPieces;
+    this.state.wardrobe.allCombinations = allCombos;
+    this.state.wardrobe.optimization = optimization;
+    this.state.wardrobe.missingItems = missingItems;
+    if (this.state.wardrobe.stats) {
+      this.state.wardrobe.stats.totalPieces = updatedPieces.length;
+      this.state.wardrobe.stats.totalOutfits = allCombos.length;
+      this.state.wardrobe.stats.totalWeightGrams = updatedPieces.reduce((acc, p) => acc + (parseInt(p.weight, 10) || 250), 0);
+    }
+
+    this.showToast('PIECE ADOPTED', `"${piece.name}" added. Capsule re-optimized with ${allCombos.length} combinations.`);
+    this.notify('CAPSULE_PIECES_UPDATED', this.state.wardrobe);
+    return true;
+  }
+
+  removePieceFromActiveCapsule(pieceId) {
+    if (this.state.wardrobe.pieces.length <= 4) {
+      this.showToast('CAPSULE LIMIT REACHED', 'A travel capsule requires at least 4 foundation pieces.');
+      return false;
+    }
+
+    const removedPiece = this.state.wardrobe.pieces.find(p => p.id === pieceId);
+    const updatedPieces = this.state.wardrobe.pieces.filter(p => p.id !== pieceId);
+    const destMeta = this.state.currentTrip.destinationMeta;
+    const climate = this.state.wardrobe.climate;
+
+    const allCombos = outfitEngine.generateAllCombinations(updatedPieces, destMeta, climate);
+    const optimization = outfitEngine.analyzeWardrobeOptimization(updatedPieces, allCombos);
+    const missingItems = outfitEngine.detectMissingItems({
+      pieces: updatedPieces,
+      destination: destMeta,
+      activities: this.state.currentTrip.activities,
+      climate
+    });
+
+    this.state.wardrobe.pieces = updatedPieces;
+    this.state.wardrobe.allCombinations = allCombos;
+    this.state.wardrobe.optimization = optimization;
+    this.state.wardrobe.missingItems = missingItems;
+    if (this.state.wardrobe.stats) {
+      this.state.wardrobe.stats.totalPieces = updatedPieces.length;
+      this.state.wardrobe.stats.totalOutfits = allCombos.length;
+      this.state.wardrobe.stats.totalWeightGrams = updatedPieces.reduce((acc, p) => acc + (parseInt(p.weight, 10) || 250), 0);
+    }
+
+    const name = removedPiece ? removedPiece.name : 'Piece';
+    this.showToast('PIECE REMOVED', `"${name}" removed from capsule. Outfits recalculated.`);
+    this.notify('CAPSULE_PIECES_UPDATED', this.state.wardrobe);
+    return true;
   }
 
   // Toast System
