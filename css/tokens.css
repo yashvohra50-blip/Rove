@@ -148,5 +148,13 @@
   --glow-twilight: rgba(100, 80, 155, 0.07);
   --glow-obsidian: rgba(200, 210, 220, 0.05);
   --grain-opacity: 0.024;
+
+  /* ------------------------------------------------------------------------
+     9. CINEMATIC POLISH & PACING TOKENS (Phase 15)
+     ------------------------------------------------------------------------ */
+  --divider-cinematic: linear-gradient(90deg, transparent 0%, rgba(212, 175, 122, 0.22) 50%, transparent 100%);
+  --divider-subtle: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+  --scroll-offset: calc(var(--nav-height, 72px) + 1.5rem);
 }
+
 

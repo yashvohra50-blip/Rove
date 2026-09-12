@@ -193,21 +193,34 @@ Write-Host "`nSTAGE 15: RESPONSIVE OVERFLOW & MOTION RESPECT" -ForegroundColor W
 $baseCss = Get-Content (Join-Path $root "css\base.css") -Raw
 $transitionsCss = Get-Content (Join-Path $root "css\transitions.css") -Raw
 $editorialCss = Get-Content (Join-Path $root "css\editorial.css") -Raw
+$tokensCss = Get-Content (Join-Path $root "css\tokens.css") -Raw
 
-Assert-Check "base.css sets overflow-x: hidden on body" ($baseCss -match "overflow-x:\s*hidden")
+Assert-Check "base.css sets overflow-x: hidden on body" ($baseCss -match "body\s*\{[^}]*overflow-x:\s*hidden")
 Assert-Check "base.css replaces elaborate motion with gentle opacity fades" ($baseCss -match "prefers-reduced-motion" -and $baseCss -match "transition:\s*opacity\s*0\.2s\s*ease")
 Assert-Check "transitions.css uses gentle opacity fade under reduced motion" ($transitionsCss -match "transition:\s*opacity\s*0\.2s\s*ease\s*!important")
 Assert-Check "editorial.css unpins sticky stages into accessible flow under reduced motion" ($editorialCss -match "min-height:\s*auto\s*!important" -and $editorialCss -match "position:\s*relative\s*!important")
 
+# ============================================================================
+# STAGE 16: PHASE 15 — FINAL CINEMATIC POLISH & PACING
+# ============================================================================
+Write-Host "`nSTAGE 16: PHASE 15 FINAL CINEMATIC POLISH" -ForegroundColor White
+
+Assert-Check "tokens.css defines cinematic divider and scroll offset tokens" ($tokensCss -match "--divider-cinematic" -and $tokensCss -match "--scroll-offset")
+Assert-Check "base.css guarantees zero scroll jumps via scroll-margin-top on section anchors" ($baseCss -match "scroll-margin-top:\s*var\(--scroll-offset")
+Assert-Check "base.css guarantees zero mobile overflow with html overflow-x: hidden" ($baseCss -match "html\s*\{[^}]*overflow-x:\s*hidden")
+Assert-Check "base.css prevents scrollbar width leak using inset: 0 on grain veil" ($baseCss -match "body::after\s*\{[^}]*inset:\s*0")
+Assert-Check "editorial.css softens section transitions using cinematic divider" ($editorialCss -match "border-image:\s*var\(--divider-cinematic\)")
+
 Write-Host ""
 Write-Host "=================================================================" -ForegroundColor Cyan
-Write-Host "   WALKTHROUGH AUDIT SUMMARY: $passed PASSED, $failed FAILED     " -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Red" })
+Write-Host "   WALKTHROUGH & POLISH AUDIT: $passed PASSED, $failed FAILED   " -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Red" })
 Write-Host "=================================================================" -ForegroundColor Cyan
 
 if ($failed -eq 0) {
-    Write-Host "`nPHASE 14 VERIFICATION RESULT: 100% COMPLETE & PASSING" -ForegroundColor Green
+    Write-Host "`nPHASE 14 & 15 VERIFICATION RESULT: 100% COMPLETE & PASSING" -ForegroundColor Green
     exit 0
 } else {
-    Write-Host "`nPHASE 14 VERIFICATION RESULT: $failed FAILURES FOUND" -ForegroundColor Red
+    Write-Host "`nPHASE 14 & 15 VERIFICATION RESULT: $failed FAILURES FOUND" -ForegroundColor Red
     exit 1
 }
+

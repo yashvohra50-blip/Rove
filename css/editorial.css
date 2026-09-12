@@ -33,8 +33,9 @@
 .problem-section {
   position: relative;
   background-color: var(--bg-primary);
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: var(--divider-cinematic) 1;
   overflow: hidden;
 }
 
@@ -708,8 +709,9 @@
 .killer-section {
   position: relative;
   background: #0E0E12;
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: var(--divider-cinematic) 1;
   padding-top: clamp(6rem, 11vw, 10rem);
   padding-bottom: clamp(6rem, 11vw, 10rem);
   overflow: hidden;
@@ -1114,15 +1116,15 @@
 
 /* Payoff Banner: NOTHING EXTRA. */
 .killer-payoff-banner {
-  margin-top: 3.5rem;
-  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 122, 0.08) 0%, rgba(18, 18, 22, 0.95) 75%), var(--bg-secondary);
+  margin-top: clamp(3.5rem, 6vw, 5rem);
+  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 122, 0.12) 0%, rgba(18, 18, 22, 0.95) 75%), var(--bg-secondary);
   border: 1px solid var(--border-focus);
   border-radius: var(--radius-sm);
-  padding: clamp(2.5rem, 5vw, 4.5rem) 2rem;
+  padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 3rem);
   text-align: center;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(212, 175, 122, 0.08);
 }
 
 .payoff-content {
@@ -1163,8 +1165,9 @@
   flex-wrap: wrap;
   padding: 1.25rem 0;
   width: 100%;
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: var(--divider-cinematic) 1;
   margin: 0.5rem 0;
 }
 
@@ -1197,6 +1200,8 @@
 .modules-section {
   position: relative;
   background: var(--bg-primary);
+  border-top: 1px solid transparent;
+  border-image: var(--divider-cinematic) 1;
   padding-top: clamp(6rem, 10vw, 9rem);
   padding-bottom: clamp(6rem, 10vw, 9rem);
 }
