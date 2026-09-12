@@ -202,6 +202,9 @@ export class WardrobeResult {
               <button class="btn btn-primary" id="downloadChecklistBtn">
                 PACKING CHECKLIST ✓
               </button>
+              <button class="btn btn-primary" id="saveCapsuleBtn" style="background: linear-gradient(135deg, var(--accent-primary) 0%, #a87e38 100%);">
+                SAVE TO VAULT 🗄️
+              </button>
             </div>
           </div>
 
@@ -253,6 +256,13 @@ export class WardrobeResult {
           'PACKING LIST GENERATED',
           `Your 6-piece carry-on allocation for ${currentTrip.destination.toUpperCase()} has been saved to your session.`
         );
+      });
+    }
+
+    const saveCapsuleBtn = this.mountPoint.querySelector('#saveCapsuleBtn');
+    if (saveCapsuleBtn) {
+      saveCapsuleBtn.addEventListener('click', () => {
+        store.saveCurrentTripToAccount();
       });
     }
   }

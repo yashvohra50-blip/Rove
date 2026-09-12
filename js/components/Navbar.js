@@ -23,6 +23,8 @@ export class Navbar {
         if (this.isMobileMenuOpen) {
           this.toggleMobileMenu(false);
         }
+      } else if (event === 'AUTH_STATE_CHANGED') {
+        this.updateAuthUI();
       }
     });
   }
@@ -51,6 +53,7 @@ export class Navbar {
 
           <!-- Action & Mobile Toggle -->
           <div class="nav-actions">
+            <div id="navAuthMount" style="display: flex; align-items: center;"></div>
             <button class="btn btn-primary btn-sm" id="navBuildTripBtn" aria-haspopup="dialog">
               BUILD MY TRIP
             </button>
@@ -71,6 +74,7 @@ export class Navbar {
           <a href="#/footwear" class="mobile-link" data-route="#/footwear">FOOTWEAR</a>
           <a href="#/" class="mobile-link" id="mobilePackLink">PACK (COMING NEXT)</a>
           <a href="#footerRoadmap" class="mobile-link" id="mobileAboutLink">ABOUT ROVE</a>
+          <div id="mobileAuthMount"></div>
         </div>
         <div class="mobile-menu-footer">
           <button class="btn btn-primary btn-lg" id="mobileBuildTripBtn" style="width: 100%;" aria-haspopup="dialog">
@@ -83,6 +87,7 @@ export class Navbar {
       </div>
     `;
 
+    this.updateAuthUI();
     this.updateActiveLinks();
   }
 
@@ -193,6 +198,75 @@ export class Navbar {
           this.lastFocused.focus();
         } else {
           toggle.focus();
+        }
+      }
+    }
+  }
+
+  updateAuthUI() {
+    const navMount = this.mountPoint.querySelector('#navAuthMount');
+    const mobileMount = this.mountPoint.querySelector('#mobileAuthMount');
+    const authState = store.getState().auth;
+
+    if (authState.isAuthenticated && authState.user) {
+      const user = authState.user;
+      const initials = user.name
+        ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+        : 'R';
+
+      if (navMount) {
+        navMount.innerHTML = `
+          <a href="#/my-rove" class="nav-auth-btn" id="navMyRoveBtn" aria-label="Open My Rove Dashboard">
+            <span class="nav-user-initials" aria-hidden="true">${initials}</span>
+            <span>MY ROVE</span>
+          </a>
+        `;
+      }
+
+      if (mobileMount) {
+        mobileMount.innerHTML = `
+          <a href="#/my-rove" class="mobile-link" data-route="#/my-rove" id="mobileMyRoveLink" style="color: var(--accent-primary);">
+            MY ROVE (${user.name})
+          </a>
+          <button type="button" class="mobile-link" id="mobileSignOutBtn" style="background: none; border: none; text-align: left; cursor: pointer; color: #f87171; font-size: inherit; font-family: inherit;">
+            SIGN OUT
+          </button>
+        `;
+        const signOutBtn = mobileMount.querySelector('#mobileSignOutBtn');
+        if (signOutBtn) {
+          signOutBtn.addEventListener('click', () => {
+            this.toggleMobileMenu(false);
+            store.logout();
+          });
+        }
+      }
+    } else {
+      if (navMount) {
+        navMount.innerHTML = `
+          <button type="button" class="nav-auth-btn" id="navSignInBtn">
+            SIGN IN
+          </button>
+        `;
+        const signInBtn = navMount.querySelector('#navSignInBtn');
+        if (signInBtn) {
+          signInBtn.addEventListener('click', () => {
+            store.openAuthModal('login');
+          });
+        }
+      }
+
+      if (mobileMount) {
+        mobileMount.innerHTML = `
+          <button type="button" class="mobile-link" id="mobileSignInBtn" style="background: none; border: none; text-align: left; cursor: pointer; color: var(--accent-primary); font-size: inherit; font-family: inherit;">
+            SIGN IN / JOIN
+          </button>
+        `;
+        const mobileSignIn = mobileMount.querySelector('#mobileSignInBtn');
+        if (mobileSignIn) {
+          mobileSignIn.addEventListener('click', () => {
+            this.toggleMobileMenu(false);
+            store.openAuthModal('login');
+          });
         }
       }
     }

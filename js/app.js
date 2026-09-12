@@ -18,6 +18,8 @@ import { ClothingView } from './components/ClothingView.js';
 import { FootwearView } from './components/FootwearView.js';
 import { Footer } from './components/Footer.js';
 import { ToastModal } from './components/ToastModal.js';
+import { AuthModal } from './components/AuthModal.js';
+import { MyRoveView } from './components/MyRoveView.js';
 
 class App {
   constructor() {
@@ -29,12 +31,14 @@ class App {
     const navMount = document.getElementById('navMount');
     const builderMount = document.getElementById('builderMount');
     const toastMount = document.getElementById('toastMount');
+    const authModalMount = document.getElementById('authModalMount');
     const footerMount = document.getElementById('footerMount');
     const appView = document.getElementById('appView');
 
     if (navMount) new Navbar(navMount);
     if (builderMount) new TripBuilder(builderMount);
     if (toastMount) new ToastModal(toastMount);
+    if (authModalMount) new AuthModal(authModalMount);
     if (footerMount) new Footer(footerMount);
 
     // 2. Define Route Handlers
@@ -72,6 +76,11 @@ class App {
         const footwearWrapper = document.createElement('div');
         container.appendChild(footwearWrapper);
         new FootwearView(footwearWrapper);
+      },
+      '#/my-rove': (container) => {
+        const myRoveWrapper = document.createElement('div');
+        container.appendChild(myRoveWrapper);
+        new MyRoveView(myRoveWrapper);
       }
     };
 

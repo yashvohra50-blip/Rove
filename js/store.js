@@ -4,6 +4,7 @@
  */
 
 import { DESTINATIONS, JAIPUR_CAPSULE_PIECES, JAIPUR_OUTFITS } from './data/mockData.js';
+import { authService } from './services/authService.js';
 
 class Store {
   constructor() {
@@ -28,6 +29,8 @@ class Store {
       // Graceful fallback if cookies/storage blocked
     }
 
+    const initialUser = authService.getActiveSession();
+
     this.state = {
       currentTrip: initialTrip,
       wardrobe: {
@@ -39,6 +42,14 @@ class Store {
         isOpen: false,
         step: 1, // 1: Dest, 2: Days, 3: Activities, 4: Style, 5: Luggage, 6: Ready
         isCurating: false
+      },
+      auth: {
+        user: initialUser,
+        isAuthenticated: !!initialUser,
+        isAuthModalOpen: false,
+        authModalView: 'login', // 'login' | 'signup' | 'verify' | 'forgot' | 'reset'
+        authEmailContext: '',
+        redirectAfterAuth: null
       },
       toast: {
         isOpen: false,
@@ -182,6 +193,62 @@ class Store {
   setRoute(hash) {
     this.state.activeRoute = hash || '#/';
     this.notify('ROUTE_CHANGED', this.state.activeRoute);
+  }
+
+  // ==========================================================================
+  // Auth Mutations (Phase 16)
+  // ==========================================================================
+
+  openAuthModal(view = 'login', redirectUrl = null, emailContext = '') {
+    this.state.auth.isAuthModalOpen = true;
+    this.state.auth.authModalView = view;
+    if (redirectUrl !== undefined) {
+      this.state.auth.redirectAfterAuth = redirectUrl;
+    }
+    if (emailContext) {
+      this.state.auth.authEmailContext = emailContext;
+    }
+    this.notify('AUTH_MODAL_OPENED', this.state.auth);
+  }
+
+  closeAuthModal() {
+    this.state.auth.isAuthModalOpen = false;
+    this.notify('AUTH_MODAL_CLOSED', this.state.auth);
+  }
+
+  setAuthUser(user) {
+    this.state.auth.user = user;
+    this.state.auth.isAuthenticated = !!user;
+    this.notify('AUTH_STATE_CHANGED', this.state.auth);
+  }
+
+  logout() {
+    authService.logout();
+    this.state.auth.user = null;
+    this.state.auth.isAuthenticated = false;
+    this.state.auth.redirectAfterAuth = null;
+    this.notify('AUTH_STATE_CHANGED', this.state.auth);
+    this.showToast('SIGNED OUT', 'You have been safely signed out of ROVE.');
+    if (window.location.hash === '#/my-rove') {
+      window.location.hash = '#/';
+    }
+  }
+
+  saveCurrentTripToAccount() {
+    if (!this.state.auth.isAuthenticated || !this.state.auth.user) {
+      this.openAuthModal('login', null);
+      this.showToast('SIGN IN REQUIRED', 'Sign in to save this bespoke journey to your ROVE Passport.');
+      return false;
+    }
+
+    const updatedUser = authService.saveTripToAccount(
+      this.state.auth.user.id,
+      this.state.currentTrip,
+      this.state.wardrobe
+    );
+    this.setAuthUser(updatedUser);
+    this.showToast('JOURNEY ARCHIVED', `${this.state.currentTrip.destination} capsule saved to your ROVE account.`);
+    return true;
   }
 }
 

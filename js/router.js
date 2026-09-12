@@ -44,6 +44,19 @@ export class Router {
       return false;
     }) || '#/';
 
+    // Protected Route Guard (Phase 16: Authentication & Security)
+    const protectedRoutes = ['#/my-rove', '#/profile'];
+    if (protectedRoutes.includes(routeKey)) {
+      if (!store.getState().auth.isAuthenticated) {
+        store.showToast('MEMBER ACCESS REQUIRED', 'Please authenticate to access your ROVE Nomadic Passport.');
+        store.openAuthModal('login', routeKey);
+        // Fallback to current route or homepage
+        const fallback = (this.currentRoute && !protectedRoutes.includes(this.currentRoute)) ? this.currentRoute : '#/';
+        window.location.hash = fallback;
+        return;
+      }
+    }
+
     if (this.currentRoute === routeKey) return;
     this.currentRoute = routeKey;
 
