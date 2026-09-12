@@ -3,7 +3,7 @@ $root = "C:\Users\Yash Vohra\.gemini\antigravity-ide\scratch\rove"
 
 for ($p = 8090; $p -le 8110; $p++) {
     try {
-        $listener = New-Object System.Net.Sockets.TcpListener([System.Net.IPAddress]::Any, $p)
+        $listener = New-Object System.Net.Sockets.TcpListener([System.Net.IPAddress]::Loopback, $p)
         $listener.Start()
         $port = $p
         break
@@ -31,6 +31,8 @@ $buffer = New-Object byte[] 65536
 while ($true) {
     try {
         $client = $listener.AcceptTcpClient()
+        $client.ReceiveTimeout = 2000
+        $client.SendTimeout = 2000
         $stream = $client.GetStream()
         $bytesRead = $stream.Read($buffer, 0, $buffer.Length)
         if ($bytesRead -gt 0) {
@@ -45,7 +47,6 @@ while ($true) {
                 $safePath = $urlPath.TrimStart('/').Replace('/', '\')
                 $filePath = Join-Path $root $safePath
                 if (-not (Test-Path $filePath -PathType Leaf)) {
-                    # SPA Fallback for client-side routing
                     $filePath = Join-Path $root "index.html"
                 }
 
@@ -67,6 +68,6 @@ while ($true) {
         $stream.Flush()
         $client.Close()
     } catch {
-        # continue on error
+        # continue
     }
 }

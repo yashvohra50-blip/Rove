@@ -26,7 +26,16 @@ $endpoints = @(
     "/js/components/ClothingView.js",
     "/js/components/FootwearView.js",
     "/js/components/Footer.js",
-    "/js/components/ToastModal.js"
+    "/js/components/ToastModal.js",
+    "/js/components/AuthModal.js",
+    "/js/components/MyRoveView.js",
+    "/js/components/UserWardrobeView.js",
+    "/js/components/WardrobeItemModal.js",
+    "/js/services/authService.js",
+    "/js/services/tripIntelligenceEngine.js",
+    "/js/services/outfitEngine.js",
+    "/css/auth.css",
+    "/css/wardrobe-manager.css"
 )
 
 $port = 8090
